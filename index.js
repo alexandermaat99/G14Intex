@@ -1,37 +1,25 @@
+// index.js
+
 const express = require("express");
+const app = express();
+const path = require("path");
 
-let app = express();
-
-let path = require("path");
-
-const port = process.env.PORT || 3000;
-
+// Set EJS as the view engine
 app.set("view engine", "ejs");
+app.set("views", path.join(__dirname, "views"));
 
-app.use(express.urlencoded({ extended: true }));
-
-const knex = require("knex")({
-  client: "pg",
-  connection: {
-    host: process.env.RDS_HOSTNAME || "localhost",
-    user: process.env.RDS_USERNAME || "postgres",
-    password: process.env.RDS_PASSWORD || "admin",
-    database: process.env.RDS_DB_NAME || "bucket_list",
-    port: process.env.RDS_PORT || 5432,
-    ssl: process.env.DB_SSL ? { rejectUnauthorized: false } : false,
-  },
-});
-
-//route, needs two things, request object and response
-
+// Route to render the index.ejs file
 app.get("/", (req, res) => {
-  knex
-    .select()
-    .from("country")
-    .then((country) => {
-      // respond with html and data
-      res.render("displayCountry", { myCountry: country });
-    });
+  const data = {
+    title: "Simple EJS Example",
+    message: "Welcome to EJS!",
+    items: ["Item 1", "Item 2", "Item 3"], // Example array of items
+  };
+  res.render("index", { data });
 });
 
-app.listen(port, () => console.log("Listening"));
+const PORT = process.env.PORT || 3000;
+
+app.listen(PORT, () => {
+  console.log(`Server is running on port ${PORT}`);
+});
