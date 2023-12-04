@@ -87,3 +87,47 @@ input[type="submit"]:hover {
 .center-text {
     text-align: center; /* Center-align text within the parent div */
 }
+/* Styling the range input (slider) */
+input[type="range"] {
+    /* Remove default styles */
+    -webkit-appearance: none;
+    appearance: none;
+    /* Width and height to adjust the appearance of the slider */
+    width: 16%;
+    height: 10px;
+    /* Customize the slider track */
+    background-color: navy; /* Set the track color to navy blue */
+    border: none; /* Remove the default border */
+    border-radius: 5px; /* Add rounded corners */
+    /* Add a blue background on active (clicked) state */
+    outline: none;
+}
+
+/* Style the slider thumb as white */
+input[type="range"]::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    width: 20px; /* Set the width of the thumb */
+    height: 20px; /* Set the height of the thumb */
+    background-color: white;
+    border: 1px solid #ccc; /* Add a border for contrast (optional) */
+    border-radius: 50%; /* Make it round (optional) */
+    cursor: pointer; /* Change cursor to pointer on hover (optional) */
+}
+
+input[type="range"]::-moz-range-thumb {
+    width: 20px; /* Set the width of the thumb */
+    height: 20px; /* Set the height of the thumb */
+    background-color: white;
+    border: 1px solid #ccc; /* Add a border for contrast (optional) */
+    border-radius: 50%; /* Make it round (optional) */
+    cursor: pointer; /* Change cursor to pointer on hover (optional) */
+}
+
+input[type="range"]::-ms-thumb {
+    width: 20px; /* Set the width of the thumb */
+    height: 20px; /* Set the height of the thumb */
+    background-color: white;
+    border: 1px solid #ccc; /* Add a border for contrast (optional) */
+    border-radius: 50%; /* Make it round (optional) */
+    cursor: pointer; /* Change cursor to pointer on hover (optional) */
+}
