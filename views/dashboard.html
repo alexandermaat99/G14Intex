@@ -1,0 +1,49 @@
+<!-- views/display-data.ejs -->
+
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Survey Data</title>
+    <link rel="stylesheet" type="text/css" href="styles.css">
+</head>
+<body>
+    <h1>Survey Data</h1>
+    <% if (isAdmin) { %>
+    <!-- Admin Controls -->
+    <form action="/display-data" method="GET">
+        <label for="username">Select a specific person:</label>
+        <input type="text" id="username" name="username">
+        <input type="checkbox" id="displayAll" name="displayAll" value="true">
+        <label for="displayAll">Display all data</label>
+        <button type="submit">Submit</button>
+    </form>
+    <% } %>
+    
+    <!-- Display Survey Data -->
+    <!-- Loop through the survey data and display it -->
+    <% for (const entry of surveyData) { %>
+        <h2>Survey Entry</h2>
+        <p>Age: <%= entry.age %></p>
+        <p>Gender: <%= entry.gender %></p>
+        <p>Relationship: <%= entry.relationship %></p>
+        <p>Occupation: <%= entry.occupation.join(', ') %></p>
+        <p>Organizations Affiliated With: <%= entry.organizations.join(', ') %></p>
+        <p>Do you use social media? <%= entry.usesocialmedia %></p>
+        <p>Platforms Used: <%= entry.platforms.join(', ') %></p>
+        <p>Average time on social media every day: <%= entry.avgtime %></p>
+        <p>On a scale of 1 to 10, what is the average time you spend on social media every day?: <%= entry.q8 %></p>
+        <p>On a scale of 1 to 10, how often do you find yourself using social media without a specific purpose?: <%= entry.q9 %></p>
+        <p>On a scale of 1 to 10, do you feel restless if you haven't used social media in a while?: <%= entry.q10 %></p>
+        <p>On a scale of 1 to 10, how easily distracted are you?: <%= entry.q11 %></p>
+        <p>On a scale of 1 to 10, how much are you bothered by worries?: <%= entry.q12 %></p>
+        <p>On a scale of 1 to 10, do you find it difficult to concentrate on things?: <%= entry.q13 %></p>
+        <p>On a scale of 1-10, how often do you compare yourself to other successful people through the use of social media?: <%= entry.q14 %></p>
+        <p>On a scale of 1 to 10, following the previous question, how do you feel about these comparisons, generally speaking?: <%= entry.q15 %></p>
+        <p>On a scale of 1 to 10, how often do you look to seek validation from features of social media?: <%= entry.q16 %></p>
+        <p>On a scale of 1 to 10, how often do you feel depressed or down?: <%= entry.q17 %></p>
+        <p>On a scale of 1 to 10, how frequently does your interest in daily activities fluctuate?: <%= entry.q18 %></p>
+        <p>On a scale of 1 to 10, how often do you face issues regarding sleep?: <%= entry.q19 %></p>
+        
+    <% } %>
+</body>
+</html>
