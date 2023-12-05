@@ -6,8 +6,7 @@ const bcrypt = require("bcrypt");
 const app = express();
 const path = require("path");
 app.use(express.static("public"));
-app.use('/public', express.static(__dirname + '/public'));
-
+app.use("/public", express.static(__dirname + "/public"));
 
 // Set EJS as the view engine
 app.set("view engine", "ejs");
@@ -77,11 +76,11 @@ app.post("/login", async (req, res) => {
   }
 });
 
-app.get("/survey",(req, res) => {
+app.get("/survey", (req, res) => {
   res.render("survey");
 });
 
-app.get("/dashboard",(req, res) => {
+app.get("/dashboard", (req, res) => {
   res.render("dashboard");
 });
 
@@ -155,25 +154,39 @@ app.get("/addUser", (req, res) => {
   res.render("addUser");
 });
 
-// app.post("/editUser", (req, res) => {
-//   knex("users")
-//     .where("id", req.params.id)
-//     .update({
-//       fName: req.body.fName,
-//       lName: req.body.lName,
-//       email: req.body.email,
-//       phone: req.body.phone,
-//       password: req.body.password,
-//     })
-//     .then((user) => {
-//       res.redirect("/userPage");
-//     });
-//   // Logic for updating user
-// });
+// Route to handle user creation form
+app.post("/addUser", async (req, res) => {
+  const { fName, lName, email, phone, password } = req.body;
+  try {
+    // Add the user to the database
+    // Note: You should hash the password before storing it
+    const newUser = await knex("users")
+      .insert({
+        fName,
+        lName,
+        email,
+        phone,
+        password, // Ideally, hash this password before storing
+      })
+      .returning("*");
+
+    // Redirect to the user page or display a success message
+    res.redirect("/userPage");
+  } catch (err) {
+    console.error(err.message);
+    res.status(500).send("Error adding user");
+  }
+});
 
 // Delete User Route
-app.get("/deleteUser/:id", (req, res) => {
-  // Logic for deleting user
+app.post("/deleteUser/:id", async (req, res) => {
+  try {
+    await knex("users").where("id", req.params.id).del();
+    res.redirect("/userPage");
+  } catch (err) {
+    console.error(err);
+    res.status(500).send("Error deleting user");
+  }
 });
 
 app.listen(PORT, () => {
