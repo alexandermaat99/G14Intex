@@ -29,14 +29,15 @@ app.get("/", (req, res) => {
   res.render("index");
 });
 
-app.get("/addname", (req, res) => {
-  res.render("login.ejs");
+// Route to render the login.ejs file
+app.get("/login", (req, res) => {
+  res.render("login");
 });
 
-app.get("/addname", (req, res) => {
-  res.render("userPage.ejs");
+// Route to render the userPage.ejs file
+app.get("/userPage", (req, res) => {
+  res.render("userPage");
 });
-
 app.post("/addname", async (req, res) => {
   const { name } = req.body;
   try {
