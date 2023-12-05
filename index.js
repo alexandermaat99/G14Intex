@@ -7,6 +7,16 @@ const path = require("path");
 // Set EJS as the view engine
 app.set("view engine", "ejs");
 app.set("views", path.join(__dirname, "views"));
+const knex = require("knex")({
+  client: "pg",
+  connection: {
+    host: "localhost",
+    user: "postgres",
+    password: "admin",
+    database: "intex",
+    port: 5432,
+  },
+});
 
 // Route to render the index.ejs file
 app.get("/", (req, res) => {
