@@ -1,10 +1,11 @@
 // index.js
 const express = require("express");
 const bodyParser = require("body-parser");
-const bcrypt = require("bcrypt");
 
 const app = express();
 const path = require("path");
+
+// Serve static files from the public folder
 app.use(express.static("public"));
 app.use("/public", express.static(__dirname + "/public"));
 
@@ -14,6 +15,8 @@ app.set("views", path.join(__dirname, "views"));
 
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
+
+// conect to database
 const knex = require("knex")({
   client: "pg",
   connection: {
@@ -25,6 +28,7 @@ const knex = require("knex")({
   },
 });
 
+// dynamic port binding
 const PORT = process.env.PORT || 3000;
 
 // Route to render the index.ejs file
@@ -32,10 +36,13 @@ app.get("/", (req, res) => {
   res.render("index");
 });
 
+// GET to render the login.ejs file
 app.get("/login", (req, res) => {
   const error = "";
   res.render("login", { error }); // Render the login form
 });
+
+// POST login route
 
 app.post("/login", async (req, res) => {
   const { email, password } = req.body;
@@ -76,14 +83,28 @@ app.post("/login", async (req, res) => {
   }
 });
 
+// GET route to survery page
 app.get("/survey", (req, res) => {
   res.render("survey");
 });
 
+// GET route to dashboard page
 app.get("/dashboard", (req, res) => {
   res.render("dashboard");
 });
 
+// GET userPage Route
+app.get("/userPage", async (req, res) => {
+  try {
+    const users = await knex.select().from("users");
+    res.render("userPage", { users: users });
+  } catch (err) {
+    console.error(err);
+    res.status(500).send("Error loading users");
+  }
+});
+
+// POST add user
 app.post("/addname", async (req, res) => {
   const { name } = req.body;
   try {
@@ -99,29 +120,7 @@ app.post("/addname", async (req, res) => {
   }
 });
 
-// UserPage Route
-app.get("/userPage", async (req, res) => {
-  try {
-    const users = await knex.select().from("users");
-    res.render("userPage", { users: users });
-  } catch (err) {
-    console.error(err);
-    res.status(500).send("Error loading users");
-  }
-});
-
-// // Add User Route
-// app.post("/addUser", async (req, res) => {
-//   const { name } = req.body; // Update with actual form fields
-//   try {
-//     const newEntry = await knex("users").insert({ name }).returning("*");
-//     res.render("user_added", { name: newEntry[0].name });
-//   } catch (err) {
-//     console.error(err.message);
-//     res.send("Error in adding user");
-//   }
-// });
-
+// GET edit user route
 app.get("/editUser/:id", async (req, res) => {
   try {
     const user = await knex("users").where("id", req.params.id).first();
@@ -136,7 +135,7 @@ app.get("/editUser/:id", async (req, res) => {
   }
 });
 
-// Post route for updating user details
+// POST edituser route
 app.post("/editUser/:id", async (req, res) => {
   const { fName, lName, email, phone, password } = req.body;
   try {
@@ -150,11 +149,12 @@ app.post("/editUser/:id", async (req, res) => {
   }
 });
 
+// GET add user route
 app.get("/addUser", (req, res) => {
   res.render("addUser");
 });
 
-// Route to handle user creation form
+// POST add user route
 app.post("/addUser", async (req, res) => {
   const { fName, lName, email, phone, password } = req.body;
   try {
@@ -178,7 +178,7 @@ app.post("/addUser", async (req, res) => {
   }
 });
 
-// Delete User Route
+// POST delete User Route
 app.post("/deleteUser/:id", async (req, res) => {
   try {
     await knex("users").where("id", req.params.id).del();
@@ -189,6 +189,7 @@ app.post("/deleteUser/:id", async (req, res) => {
   }
 });
 
+// port response
 app.listen(PORT, () => {
   console.log(`Server is running on port ${PORT}`);
 });
