@@ -25,7 +25,7 @@ app.get("/", (req, res) => {
     message: "Welcome to EJS!",
     items: ["Item 1", "Item 2", "Item 3"], // Example array of items
   };
-  res.render("index", { data });
+  res.sendFile(path.join(__dirname + "/views/index.html"));
 });
 
 const PORT = process.env.PORT || 3000;
