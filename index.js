@@ -4,6 +4,7 @@ const bodyParser = require("body-parser");
 
 const app = express();
 const path = require("path");
+app.use(express.static("public"));
 
 // Set EJS as the view engine
 app.set("view engine", "ejs");
@@ -18,7 +19,7 @@ const knex = require("knex")({
     user: "postgres",
     password: "Ramsbasketball22" || "admin",
     database: "intex",
-    port: 5433 || 5432,
+    port: 5432,
   },
 });
 
@@ -60,11 +61,6 @@ app.post("/login", async (req, res) => {
   }
 });
 
-
-// Route to render the userPage.ejs file
-app.get("/userPage", (req, res) => {
-  res.render("userPage");
-});
 app.post("/addname", async (req, res) => {
   const { name } = req.body;
   try {
@@ -78,6 +74,43 @@ app.post("/addname", async (req, res) => {
     console.error(err.message);
     res.send("Error in adding user");
   }
+});
+
+// UserPage Route
+app.get("/userPage", async (req, res) => {
+  try {
+    const users = await knex.select().from("users");
+    res.render("userPage", { users: users });
+  } catch (err) {
+    console.error(err);
+    res.status(500).send("Error loading users");
+  }
+});
+
+// Add User Route
+app.post("/addUser", async (req, res) => {
+  const { name } = req.body; // Update with actual form fields
+  try {
+    const newEntry = await knex("users").insert({ name }).returning("*");
+    res.render("user_added", { name: newEntry[0].name });
+  } catch (err) {
+    console.error(err.message);
+    res.send("Error in adding user");
+  }
+});
+
+// Edit User Routes
+app.get("/edit/:id", (req, res) => {
+  // Logic for edit user form
+});
+
+app.post("/edit/:id", (req, res) => {
+  // Logic for updating user
+});
+
+// Delete User Route
+app.get("/delete/:id", (req, res) => {
+  // Logic for deleting user
 });
 
 app.listen(PORT, () => {
