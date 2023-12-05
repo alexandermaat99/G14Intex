@@ -6,6 +6,8 @@ const bcrypt = require("bcrypt");
 const app = express();
 const path = require("path");
 app.use(express.static("public"));
+app.use('/public', express.static(__dirname + '/public'));
+
 
 // Set EJS as the view engine
 app.set("view engine", "ejs");
@@ -62,7 +64,7 @@ app.post("/login", async (req, res) => {
       console.log("Authentication successful");
       // Create a session or JWT token to manage user sessions
       // Redirect to a protected user page or perform other actions as needed
-      res.redirect("/userPage");
+      res.redirect("/dashboard");
     } else {
       // Incorrect password
       console.log("Incorrect password");
@@ -73,6 +75,14 @@ app.post("/login", async (req, res) => {
     console.error(error.message);
     res.status(500).send("Server error");
   }
+});
+
+app.get("/survey",(req, res) => {
+  res.render("survey");
+});
+
+app.get("/dashboard",(req, res) => {
+  res.render("dashboard");
 });
 
 app.post("/addname", async (req, res) => {

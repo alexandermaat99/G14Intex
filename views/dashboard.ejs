@@ -1,0 +1,68 @@
+<!-- views/display-data.ejs -->
+
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Survey Data</title>
+    <link rel="stylesheet" type="text/css" href="styles.css">
+    <!-- Add a link to your CSS file if needed -->
+</head>
+<body>
+    <header>
+        <!-- Add a "Manage Users" button in the top right corner -->
+        <div class="header-button">
+            <a href="/userPage" class="btn">Manage Users</a>
+        </div>
+    </header>
+
+    <h1>Survey Data</h1>
+  
+    <!-- Admin Controls -->
+    <form action="/filter-data" method="POST">
+        <label for="username">Select a specific person:</label>
+        <input type="text" id="username" name="username" placeholder="Enter username">
+        <input type="checkbox" id="displayAll" name="displayAll" value="true">
+        <label for="displayAll">Display all data</label>
+        <button type="submit">Apply Filters</button>
+    </form>
+
+    
+    <!-- Display Survey Data as a Table -->
+    <table class="survey-table">
+        <!-- Table Header -->
+        <thead>
+            <tr>
+                <!-- Add your table headers here -->
+                <th>Age</th>
+                <th>Gender</th>
+                <th>Relationship</th>
+                <th>Occupation</th>
+                <th>Organizations Affiliated With</th>
+                <th>Use Social Media</th>
+                <th>Platforms Used</th>
+                <th>Avg. Time on Social Media (Daily)</th>
+                <th>Avg. Time Spent (1-10)</th>
+                <th>Frequency of Aimless Usage (1-10)</th>
+                <th>Restlessness Without SM (1-10)</th>
+                <th>Easily Distracted (1-10)</th>
+                <th>Bothered by Worries (1-10)</th>
+                <th>Difficulty Concentrating (1-10)</th>
+                <th>Comparison to Others (1-10)</th>
+                <th>Feelings About Comparisons (1-10)</th>
+                <th>Seek Validation (1-10)</th>
+                <th>Feel Depressed or Down (1-10)</th>
+                <th>Interest Fluctuation (1-10)</th>
+                <th>Sleep Issues (1-10)</th>
+                <!-- Add more headers as needed -->
+            </tr>
+      
+
+    <!-- Pagination Controls (if needed) -->
+    <div class="pagination">
+        <!-- Placeholder for pagination controls -->
+        <a href="#">Previous</a>
+        <span>Page 1 of 5</span>
+        <a href="#">Next</a>
+    </div>
+</body>
+</html>
