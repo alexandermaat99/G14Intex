@@ -114,16 +114,27 @@ app.post("/addUser", async (req, res) => {
 });
 
 // Edit User Routes
-app.get("/edit/:id", (req, res) => {
+app.get("/editUser/:id", (req, res) => {
+  knex
+    .select("id", "fName", "lName", "email", "phone", "password")
+    .from("users")
+    .where("id", req.params.id)
+    .then((data) => {
+      res.render("editUser", { user: data[0] });
+    })
+    .catch((err) => {
+      console.log(err);
+      res.status(500).json({ error: "Failed to fetch user" });
+    });
   // Logic for edit user form
 });
 
-app.post("/edit/:id", (req, res) => {
+app.post("/editUser/:id", (req, res) => {
   // Logic for updating user
 });
 
 // Delete User Route
-app.get("/delete/:id", (req, res) => {
+app.get("/deleteUser/:id", (req, res) => {
   // Logic for deleting user
 });
 
