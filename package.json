@@ -18,6 +18,7 @@
   },
   "homepage": "https://github.com/alexandermaat99/G14Intex#readme",
   "dependencies": {
+    "bcrypt": "^5.1.1",
     "ejs": "^3.1.9",
     "express": "^4.18.2",
     "knex": "^3.0.1",
