@@ -43,7 +43,6 @@ app.get("/login", (req, res) => {
 });
 
 // POST login route
-
 app.post("/login", async (req, res) => {
   const { email, password } = req.body;
   try {
