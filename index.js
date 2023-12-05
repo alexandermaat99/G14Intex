@@ -16,13 +16,14 @@ const knex = require("knex")({
   connection: {
     host: "localhost",
     user: "postgres",
-    password: "admin",
+    password: "Ramsbasketball22" || "admin",
     database: "intex",
-    port: 5432,
+    port: 5433 || 5432,
   },
 });
 
 const PORT = process.env.PORT || 3000;
+
 // Route to render the index.ejs file
 app.get("/", (req, res) => {
   res.render("index");
