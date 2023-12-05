@@ -32,7 +32,7 @@
           <td><%= users[i].phone %></td>
           <td><%= users[i].password %></td>
           <td>
-            <form action="/editUser/<%= users[i]._id %>" method="GET">
+            <form action="/editUser/<%= users[i].id %>" method="GET">
               <button type="submit">Edit</button>
             </form>
           </td>

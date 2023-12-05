@@ -101,37 +101,65 @@ app.get("/userPage", async (req, res) => {
   }
 });
 
-// Add User Route
-app.post("/addUser", async (req, res) => {
-  const { name } = req.body; // Update with actual form fields
+// // Add User Route
+// app.post("/addUser", async (req, res) => {
+//   const { name } = req.body; // Update with actual form fields
+//   try {
+//     const newEntry = await knex("users").insert({ name }).returning("*");
+//     res.render("user_added", { name: newEntry[0].name });
+//   } catch (err) {
+//     console.error(err.message);
+//     res.send("Error in adding user");
+//   }
+// });
+
+app.get("/editUser/:id", async (req, res) => {
   try {
-    const newEntry = await knex("users").insert({ name }).returning("*");
-    res.render("user_added", { name: newEntry[0].name });
+    const user = await knex("users").where("id", req.params.id).first();
+    if (user) {
+      res.render("editUser", { user });
+    } else {
+      res.status(404).send("User not found");
+    }
   } catch (err) {
-    console.error(err.message);
-    res.send("Error in adding user");
+    console.error(err);
+    res.status(500).send("Error loading user");
   }
 });
 
-// Edit User Routes
-app.get("/editUser/:id", (req, res) => {
-  knex
-    .select("id", "fName", "lName", "email", "phone", "password")
-    .from("users")
-    .where("id", req.params.id)
-    .then((data) => {
-      res.render("editUser", { user: data[0] });
-    })
-    .catch((err) => {
-      console.log(err);
-      res.status(500).json({ error: "Failed to fetch user" });
-    });
-  // Logic for edit user form
+// Post route for updating user details
+app.post("/editUser/:id", async (req, res) => {
+  const { fName, lName, email, phone, password } = req.body;
+  try {
+    await knex("users")
+      .where("id", req.params.id)
+      .update({ fName, lName, email, phone, password });
+    res.redirect("/userPage");
+  } catch (err) {
+    console.error(err);
+    res.status(500).send("Error updating user");
+  }
 });
 
-app.post("/editUser/:id", (req, res) => {
-  // Logic for updating user
+app.get("/addUser", (req, res) => {
+  res.render("addUser");
 });
+
+// app.post("/editUser", (req, res) => {
+//   knex("users")
+//     .where("id", req.params.id)
+//     .update({
+//       fName: req.body.fName,
+//       lName: req.body.lName,
+//       email: req.body.email,
+//       phone: req.body.phone,
+//       password: req.body.password,
+//     })
+//     .then((user) => {
+//       res.redirect("/userPage");
+//     });
+//   // Logic for updating user
+// });
 
 // Delete User Route
 app.get("/deleteUser/:id", (req, res) => {
