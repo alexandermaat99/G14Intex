@@ -6,8 +6,7 @@ const bcrypt = require("bcrypt");
 const app = express();
 const path = require("path");
 app.use(express.static("public"));
-app.use('/public', express.static(__dirname + '/public'));
-
+app.use("/public", express.static(__dirname + "/public"));
 
 // Set EJS as the view engine
 app.set("view engine", "ejs");
@@ -77,11 +76,11 @@ app.post("/login", async (req, res) => {
   }
 });
 
-app.get("/survey",(req, res) => {
+app.get("/survey", (req, res) => {
   res.render("survey");
 });
 
-app.get("/dashboard",(req, res) => {
+app.get("/dashboard", (req, res) => {
   res.render("dashboard");
 });
 
@@ -111,41 +110,83 @@ app.get("/userPage", async (req, res) => {
   }
 });
 
-// Add User Route
-app.post("/addUser", async (req, res) => {
-  const { name } = req.body; // Update with actual form fields
+// // Add User Route
+// app.post("/addUser", async (req, res) => {
+//   const { name } = req.body; // Update with actual form fields
+//   try {
+//     const newEntry = await knex("users").insert({ name }).returning("*");
+//     res.render("user_added", { name: newEntry[0].name });
+//   } catch (err) {
+//     console.error(err.message);
+//     res.send("Error in adding user");
+//   }
+// });
+
+app.get("/editUser/:id", async (req, res) => {
   try {
-    const newEntry = await knex("users").insert({ name }).returning("*");
-    res.render("user_added", { name: newEntry[0].name });
+    const user = await knex("users").where("id", req.params.id).first();
+    if (user) {
+      res.render("editUser", { user });
+    } else {
+      res.status(404).send("User not found");
+    }
   } catch (err) {
-    console.error(err.message);
-    res.send("Error in adding user");
+    console.error(err);
+    res.status(500).send("Error loading user");
   }
 });
 
-// Edit User Routes
-app.get("/editUser/:id", (req, res) => {
-  knex
-    .select("id", "fName", "lName", "email", "phone", "password")
-    .from("users")
-    .where("id", req.params.id)
-    .then((data) => {
-      res.render("editUser", { user: data[0] });
-    })
-    .catch((err) => {
-      console.log(err);
-      res.status(500).json({ error: "Failed to fetch user" });
-    });
-  // Logic for edit user form
+// Post route for updating user details
+app.post("/editUser/:id", async (req, res) => {
+  const { fName, lName, email, phone, password } = req.body;
+  try {
+    await knex("users")
+      .where("id", req.params.id)
+      .update({ fName, lName, email, phone, password });
+    res.redirect("/userPage");
+  } catch (err) {
+    console.error(err);
+    res.status(500).send("Error updating user");
+  }
 });
 
-app.post("/editUser/:id", (req, res) => {
-  // Logic for updating user
+app.get("/addUser", (req, res) => {
+  res.render("addUser");
+});
+
+// Route to handle user creation form
+app.post("/addUser", async (req, res) => {
+  const { fName, lName, email, phone, password } = req.body;
+  try {
+    // Add the user to the database
+    // Note: You should hash the password before storing it
+    const newUser = await knex("users")
+      .insert({
+        fName,
+        lName,
+        email,
+        phone,
+        password, // Ideally, hash this password before storing
+      })
+      .returning("*");
+
+    // Redirect to the user page or display a success message
+    res.redirect("/userPage");
+  } catch (err) {
+    console.error(err.message);
+    res.status(500).send("Error adding user");
+  }
 });
 
 // Delete User Route
-app.get("/deleteUser/:id", (req, res) => {
-  // Logic for deleting user
+app.post("/deleteUser/:id", async (req, res) => {
+  try {
+    await knex("users").where("id", req.params.id).del();
+    res.redirect("/userPage");
+  } catch (err) {
+    console.error(err);
+    res.status(500).send("Error deleting user");
+  }
 });
 
 app.listen(PORT, () => {
