@@ -1,6 +1,7 @@
 // index.js
 const express = require("express");
 const bodyParser = require("body-parser");
+const bcrypt = require('bcrypt')
 
 const app = express();
 const path = require("path");
@@ -16,9 +17,9 @@ const knex = require("knex")({
   connection: {
     host: "localhost",
     user: "postgres",
-    password: "Ramsbasketball22" || "admin",
+    password: "Ramsbasketball22",
     database: "intex",
-    port: 5433 || 5432,
+    port: 5433,
   },
 });
 
@@ -30,35 +31,50 @@ app.get("/", (req, res) => {
 });
 
 app.get("/login", (req, res) => {
-  res.render("login"); // Render the login form
+  const error = '';
+  res.render("login", {error}); // Render the login form
 });
 
 app.post("/login", async (req, res) => {
-  const { username, password } = req.body;
+  const {email, password} = req.body;
   try {
-    const user = await knex("users").where({ username }).first();
+    console.log("Received email:", email);
+    console.log("Received password:", password);
+
+    const user = await knex("users").where({email}).first();
+
+    console.log("User from the database:", user);
 
     if (!user) {
       // User not found
-      return res.status(401).send("Invalid credentials");
+      console.log("User not found");
+      const error = "Invalid credentials";
+      return res.render("login", { error });
     }
 
-    const passwordMatch = await bcrypt.compare(password, user.password);
+    console.log("Hashed Password from DB:", user.password);
 
+    // const passwordMatch = await bcrypt.compare(password, user.password);
+    const passwordMatch = user.password === password;
     if (passwordMatch) {
       // Authentication successful
+      console.log("Authentication successful");
       // Create a session or JWT token to manage user sessions
       // Redirect to a protected user page or perform other actions as needed
       res.redirect("/userPage");
     } else {
       // Incorrect password
-      res.status(401).send("Invalid credentials");
+      console.log("Incorrect password");
+      const error = "Invalid credentials";
+      res.render("login", { error });
     }
-  } catch (err) {
-    console.error(err.message);
+  } catch (error) {
+    console.error(error.message);
     res.status(500).send("Server error");
   }
 });
+
+
 
 
 // Route to render the userPage.ejs file
