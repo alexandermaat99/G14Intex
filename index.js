@@ -29,6 +29,14 @@ app.get("/", (req, res) => {
   res.render("index");
 });
 
+app.get("/addname", (req, res) => {
+  res.render("login.ejs");
+});
+
+app.get("/addname", (req, res) => {
+  res.render("userPage.ejs");
+});
+
 app.post("/addname", async (req, res) => {
   const { name } = req.body;
   try {
