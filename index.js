@@ -19,7 +19,7 @@ const knex = require("knex")({
     user: "postgres",
     password: "Ramsbasketball22",
     database: "intex",
-    port: 5433,
+    port: 5432,
   },
 });
 
@@ -73,9 +73,6 @@ app.post("/login", async (req, res) => {
     res.status(500).send("Server error");
   }
 });
-
-
-
 
 // Route to render the userPage.ejs file
 app.get("/userPage", (req, res) => {
