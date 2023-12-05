@@ -1,10 +1,11 @@
 // index.js
 const express = require("express");
 const bodyParser = require("body-parser");
-const bcrypt = require('bcrypt')
+const bcrypt = require("bcrypt");
 
 const app = express();
 const path = require("path");
+app.use(express.static("public"));
 
 // Set EJS as the view engine
 app.set("view engine", "ejs");
@@ -31,17 +32,17 @@ app.get("/", (req, res) => {
 });
 
 app.get("/login", (req, res) => {
-  const error = '';
-  res.render("login", {error}); // Render the login form
+  const error = "";
+  res.render("login", { error }); // Render the login form
 });
 
 app.post("/login", async (req, res) => {
-  const {email, password} = req.body;
+  const { email, password } = req.body;
   try {
     console.log("Received email:", email);
     console.log("Received password:", password);
 
-    const user = await knex("users").where({email}).first();
+    const user = await knex("users").where({ email }).first();
 
     console.log("User from the database:", user);
 
@@ -74,10 +75,6 @@ app.post("/login", async (req, res) => {
   }
 });
 
-// Route to render the userPage.ejs file
-app.get("/userPage", (req, res) => {
-  res.render("userPage");
-});
 app.post("/addname", async (req, res) => {
   const { name } = req.body;
   try {
@@ -91,6 +88,43 @@ app.post("/addname", async (req, res) => {
     console.error(err.message);
     res.send("Error in adding user");
   }
+});
+
+// UserPage Route
+app.get("/userPage", async (req, res) => {
+  try {
+    const users = await knex.select().from("users");
+    res.render("userPage", { users: users });
+  } catch (err) {
+    console.error(err);
+    res.status(500).send("Error loading users");
+  }
+});
+
+// Add User Route
+app.post("/addUser", async (req, res) => {
+  const { name } = req.body; // Update with actual form fields
+  try {
+    const newEntry = await knex("users").insert({ name }).returning("*");
+    res.render("user_added", { name: newEntry[0].name });
+  } catch (err) {
+    console.error(err.message);
+    res.send("Error in adding user");
+  }
+});
+
+// Edit User Routes
+app.get("/edit/:id", (req, res) => {
+  // Logic for edit user form
+});
+
+app.post("/edit/:id", (req, res) => {
+  // Logic for updating user
+});
+
+// Delete User Route
+app.get("/delete/:id", (req, res) => {
+  // Logic for deleting user
 });
 
 app.listen(PORT, () => {
