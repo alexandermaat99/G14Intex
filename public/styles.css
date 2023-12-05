@@ -131,3 +131,19 @@ input[type="range"]::-ms-thumb {
     border-radius: 50%; /* Make it round (optional) */
     cursor: pointer; /* Change cursor to pointer on hover (optional) */
 }
+/* styles.css */
+.header-button {
+    text-align: right; /* Align the button to the right */
+}
+
+.header-button a.btn {
+    background-color: #a5a8ac; /* Blue background color */
+    color: #fff; /* White text color */
+    padding: 10px 20px; /* Adjust padding as needed */
+    text-decoration: none; /* Remove underlines from links */
+    border-radius: 5px; /* Add rounded corners */
+}
+
+.header-button a.btn:hover {
+    background-color: #74777a; /* Darker blue on hover */
+}
