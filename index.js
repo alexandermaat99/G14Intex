@@ -188,6 +188,7 @@ app.post("/deleteUser/:id", async (req, res) => {
   }
 });
 
+//survey route
 app.post("/submit-survey", async (req, res) => {
   try {
     // Begin transaction
@@ -245,6 +246,7 @@ app.post("/submit-survey", async (req, res) => {
     res.status(500).send("Error submitting survey");
   }
 });
+
 // port response
 app.listen(PORT, () => {
   console.log(`Server is running on port ${PORT}`);
