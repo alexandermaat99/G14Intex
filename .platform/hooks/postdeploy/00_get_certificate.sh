@@ -1,2 +1,2 @@
 #!/usr/bin/env bash
-sudo certbot -n -d provomentalhealth.social --nginx --agree-tos --email aamaat99@gmail.com
+sudo certbot -n --force-renewal -d provosocial.org --nginx --agree-tos --email aamaat99@gmail.com

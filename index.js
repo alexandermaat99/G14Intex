@@ -1,6 +1,8 @@
 // index.js
 const express = require("express");
 const bodyParser = require("body-parser");
+const session = require("express-session"); // Added for session handling
+const bcrypt = require("bcrypt"); // Added for password hashing
 
 const app = express();
 const path = require("path");
@@ -16,6 +18,16 @@ app.set("views", path.join(__dirname, "views"));
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 
+// Session configuration
+app.use(
+  session({
+    secret: "thisisthesecretkey", // Replace with your own secret
+    resave: false,
+    saveUninitialized: true,
+    cookie: { secure: false }, // Use 'true' in a production environment with HTTPS
+  })
+);
+
 // conect to database
 const knex = require("knex")({
   client: "pg",
@@ -28,6 +40,26 @@ const knex = require("knex")({
     ssl: process.env.DB_SSL ? { rejectUnauthorized: false } : false,
   },
 });
+
+// Authentication middleware
+function checkAuthentication(req, res, next) {
+  console.log("Session data:", req.session); // Debugging line
+  if (req.session.userId) {
+    next();
+  } else {
+    res.redirect("/login");
+  }
+}
+
+// Admin check middleware
+function checkAdmin(req, res, next) {
+  console.log("Admin check for user ID:", req.session.userId); // Debugging line
+  if (req.session.isAdmin) {
+    next();
+  } else {
+    res.status(403).send("Access denied");
+  }
+}
 
 // dynamic port binding
 const PORT = process.env.PORT || 3000;
@@ -70,6 +102,8 @@ app.post("/login", async (req, res) => {
       console.log("Authentication successful");
       // Create a session or JWT token to manage user sessions
       // Redirect to a protected user page or perform other actions as needed
+      req.session.userId = user.id;
+      req.session.isAdmin = user.admin; // Assuming there's an 'admin' field in your user schema
       res.redirect("/dashboard");
     } else {
       // Incorrect password
@@ -245,6 +279,51 @@ app.post("/submit-survey", async (req, res) => {
   } catch (error) {
     console.error("Error processing survey:", error);
     res.status(500).send("Error submitting survey");
+  }
+});
+
+// Admin route to fetch and display data
+app.get("/admin/data", checkAuthentication, checkAdmin, async (req, res) => {
+  try {
+    const data = await knex
+      .select("responseid", "timestamp", "location")
+      .from("responsesinfo");
+    res.render("admin_data", { data });
+  } catch (err) {
+    console.error(err);
+    res.status(500).send("Error retrieving data");
+  }
+});
+
+// POST login route modified for session handling
+app.post("/login", async (req, res) => {
+  const { email, password } = req.body;
+  // ... existing login logic ...
+  if (passwordMatch) {
+    // Set session details on successful login
+    req.session.userId = user.id;
+    req.session.isAdmin = user.admin; // Assuming 'admin' is a boolean in your user table
+    res.redirect("/dashboard");
+  } else {
+    // ... handle failed login ...
+  }
+});
+
+// Route to display the details of a specific response
+app.get("/response-detail/:id", async (req, res) => {
+  try {
+    const responseId = req.params.id;
+    const response = await knex("responsesinfo")
+      .where("responseid", responseId)
+      .first();
+    if (response) {
+      res.render("response_detail", { response });
+    } else {
+      res.status(404).send("Response not found");
+    }
+  } catch (err) {
+    console.error(err);
+    res.status(500).send("Error retrieving response data");
   }
 });
 
