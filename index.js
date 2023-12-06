@@ -188,6 +188,63 @@ app.post("/deleteUser/:id", async (req, res) => {
   }
 });
 
+app.post("/submit-survey", async (req, res) => {
+  try {
+    // Begin transaction
+    await knex.transaction(async (trx) => {
+      // Insert into 'responses' table
+      const [responseIdObject] = await trx("responses")
+        .insert({
+          age: req.body.age,
+          gender: req.body.gender,
+          relationship: req.body.relationship,
+          occupation: req.body.occupation,
+          socialmediause: req.body.socialmediause === "yes",
+          avgtime: req.body.avgtime,
+          withoutpurpose: req.body.withoutpurpose,
+          oftendistracted: req.body.oftendistracted,
+          restless: req.body.restless,
+          easilydistracted: req.body.easilydistracted,
+          botheredworries: req.body.botheredworries,
+          concentration: req.body.concentration,
+          comparison: req.body.comparison,
+          comparisonfeeling: req.body.comparisonfeeling,
+          validation: req.body.validation,
+          depression: req.body.depression,
+          interest: req.body.interest,
+          sleep: req.body.sleep,
+          location: req.body.location,
+          timestamp: new Date(),
+        })
+        .returning("responseid");
+
+      const responseId = responseIdObject.responseid; // Extract the integer value from the object
+
+      // Insert into 'socialmediaids' table for each selected social media
+      const selectedSocialMedias = req.body.socialmediatypeid || [];
+      for (const socialMediaTypeId of selectedSocialMedias) {
+        await trx("socialmediaids").insert({
+          responseid: responseId, // This should now be an integer
+          socialmediatypeid: socialMediaTypeId,
+        });
+      }
+
+      // Insert into 'orgids' table for each selected organization
+      const selectedOrganizations = req.body.organizations || [];
+      for (const organizationId of selectedOrganizations) {
+        await trx("orgids").insert({
+          responseid: responseId,
+          organizationid: organizationId,
+        });
+      }
+    });
+
+    res.send("Survey submitted successfully");
+  } catch (error) {
+    console.error("Error processing survey:", error);
+    res.status(500).send("Error submitting survey");
+  }
+});
 // port response
 app.listen(PORT, () => {
   console.log(`Server is running on port ${PORT}`);

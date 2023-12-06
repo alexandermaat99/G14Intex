@@ -3,7 +3,9 @@
   <head>
     <title>Social Media Usage Survey</title>
     <!-- Add any necessary CSS links or scripts here -->
+    <link rel="stylesheet" type="text/css" href="/public/css/survey.css" />
   </head>
+
   <body>
     <h1>Social Media Usage Survey</h1>
     <form action="/submit-survey" method="post">
@@ -25,8 +27,8 @@
 
       <!-- relationship status -->
       <fieldset>
-        <legend>Relationship Status:</legend>
-        <br />
+        <legend>1. Relationship Status:</legend>
+
         <input
           type="radio"
           id="inrelationship"
@@ -49,8 +51,8 @@
 
       <!-- occupation status -->
       <fieldset>
-        <legend>Occupation:</legend>
-        <br />
+        <legend>2. Occupation:</legend>
+
         <input
           type="radio"
           id="universityStudent"
@@ -81,7 +83,7 @@
 
       <!-- Organizations Affiliated With (Checkbox Group) -->
       <fieldset>
-        <legend>Organizations Affiliated With:</legend>
+        <legend>3. Organizations Affiliated With:</legend>
         <!-- Example: Assuming these IDs match those in your 'organizationinfo' table -->
         <div>
           <input
@@ -133,43 +135,408 @@
         <!-- Add checkboxes for other organizations -->
       </fieldset>
 
+      <!-- do you use social media?  -->
+      <fieldset>
+        <legend for="socialmediause">4. Do you use social media?</legend>
+
+        <input type="radio" id="yes" name="socialmediause" value="yes" />
+        <label for="yes">Yes</label><br />
+        <input type="radio" id="no" name="socialmediause" value="no" />
+        <label for="no">No</label>
+      </fieldset>
+
       <!-- Social Media Platforms (Checkbox Group) -->
       <fieldset>
-        <legend>Select Social Media Platforms:</legend>
+        <legend>5. Select Social Media Platforms:</legend>
         <!-- Example: Assuming these IDs match those in your 'socialmediainfo' table -->
         <div>
           <input
             type="checkbox"
-            id="instagram"
-            name="socialmedia[]"
+            id="facebook"
+            name="socialmediatypeid[]"
             value="1"
+          /><label for="facebook">Facebook</label>
+        </div>
+        <div>
+          <input
+            type="checkbox"
+            id="twitter"
+            name="socialmediatypeid[]"
+            value="2"
+          /><label for="twitter">Twitter</label>
+        </div>
+        <div>
+          <input
+            type="checkbox"
+            id="instagram"
+            name="socialmediatypeid[]"
+            value="3"
           /><label for="instagram">Instagram</label>
         </div>
         <div>
           <input
             type="checkbox"
-            id="facebook"
-            name="socialmedia[]"
-            value="2"
-          /><label for="facebook">Facebook</label>
+            id="youtube"
+            name="socialmediatypeid[]"
+            value="4"
+          /><label for="youtube">YouTube</label>
         </div>
-        <!-- Add checkboxes for other platforms -->
+        <div>
+          <input
+            type="checkbox"
+            id="discord"
+            name="socialmediatypeid[]"
+            value="5"
+          /><label for="discord">Discord</label>
+        </div>
+        <div>
+          <input
+            type="checkbox"
+            id="reddit"
+            name="socialmediatypeid[]"
+            value="6"
+          /><label for="reddit">Reddit</label>
+        </div>
+        <div>
+          <input
+            type="checkbox"
+            id="pintrest"
+            name="socialmediatypeid[]"
+            value="7"
+          /><label for="pintrest">Pintrest</label>
+        </div>
+        <div>
+          <input
+            type="checkbox"
+            id="tiktok"
+            name="socialmediatypeid[]"
+            value="8"
+          /><label for="tiktok">Tiktok</label>
+        </div>
+        <div>
+          <input
+            type="checkbox"
+            id="snapchat"
+            name="socialmediatypeid[]"
+            value="9"
+          /><label for="snapchat">Snapchat</label>
+        </div>
       </fieldset>
 
-      <!-- Additional Survey Questions (e.g., avgtime, withoutpurpose, etc.) -->
-      <!-- Use appropriate input elements (text, radio, range, etc.) based on the type of response you expect -->
-      <div>
-        <label for="avgtime">Average Time on Social Media:</label>
-        <select id="avgtime" name="avgtime">
-          <option value="1">Less than 1 hour</option>
-          <option value="2">1-2 hours</option>
-          <!-- Add other options -->
-        </select>
+      <!-- average time on social media -->
+      <fieldset>
+        <legend>
+          6. On average, how much time do you spend on social media every day?:
+        </legend>
+
+        <input
+          type="radio"
+          id="lessThanAnHour"
+          name="avgtime"
+          value="Less than an hour"
+        />
+        <label for="lessThanAnHour">Less than an hour</label><br />
+
+        <input
+          type="radio"
+          id="beenOneAndTwoHours"
+          name="avgtime"
+          value="Between 1 and 2 hours"
+        />
+        <label for="beenOneAndTwoHours">Between 1 and 2 hours</label><br />
+
+        <input
+          type="radio"
+          id="betweenTwoAndThreeHours"
+          name="avgtime"
+          value="Between 2 and 3 hours"
+        />
+        <label for="betweenTwoAndThreeHours">Between 2 and 3 hours</label><br />
+
+        <input
+          type="radio"
+          id="betweenThreeAndFourHours"
+          name="avgtime"
+          value="Between 3 and 4 hours"
+        />
+        <label for="retibetweenThreeAndFourHoursred"
+          >Between 3 and 4 hours</label
+        ><br />
+
+        <input
+          type="radio"
+          id="betweenFiveAndSixHours"
+          name="avgtime"
+          value="Between 5 and 6 hours"
+        />
+        <label for="betweenFiveAndSixHours">Between 5 and 6 hours</label><br />
+
+        <input
+          type="radio"
+          id="moreThanFiveHours"
+          name="avgtime"
+          value="More than 5 hours"
+        />
+        <label for="moreThanFiveHours">More than 5 hours</label><br />
+      </fieldset>
+
+      <div class="sliderQuestions">
+        <!-- Question 7 -->
+        <div class="question">
+          <label for="question1"
+            >7. On a scale of 1 to 5, how often do you find yourself using
+            social media without a specific purpose? </label
+          ><br />
+          <span>Not often</span>
+          <input
+            type="range"
+            id="question1"
+            name="withoutpurpose"
+            min="1"
+            max="5"
+            value="3"
+          />
+          <span>Very Often</span>
+          <div><span id="question1Value">3</span></div>
+        </div>
+        <br />
+
+        <!-- Question 8 -->
+        <div class="question">
+          <label for="question2"
+            >8. How often do you get distracted by Social media when you are
+            busy doing something? </label
+          ><br />
+          <span>Not Often</span>
+          <input
+            type="range"
+            id="question2"
+            name="oftendistracted"
+            min="1"
+            max="5"
+            value="3"
+          />
+          <span>Very Often</span>
+          <div><span id="question2Value">3</span></div>
+        </div>
+        <br />
+
+        <!-- Question 9 -->
+        <div class="question">
+          <label for="question3"
+            >9. Do you feel restless if you haven't used Social media in a
+            while?</label
+          ><br />
+          <span>Not Restless</span>
+          <input
+            type="range"
+            id="question3"
+            name="restless"
+            min="1"
+            max="5"
+            value="3"
+          />
+          <span>Very Restless</span>
+          <div><span id="question3Value">3</span></div>
+        </div>
+        <br />
+
+        <!-- Question 10 -->
+        <div class="question">
+          <label for="question4"
+            >10.On a scale of 1 to 5, how easily distracted are you?</label
+          ><br />
+          <span>Not Easily</span>
+          <input
+            type="range"
+            id="question4"
+            name="easilydistracted"
+            min="1"
+            max="5"
+            value="3"
+          />
+          <span>Very Easily</span>
+          <div><span id="question4Value">3</span></div>
+        </div>
+        <br />
+
+        <!-- Question 11 -->
+        <div class="question">
+          <label for="question5"
+            >11. On a scale of 1 to 5, how much are you bothered by
+            worries?</label
+          ><br />
+          <span>Not Bothered</span>
+          <input
+            type="range"
+            id="question5"
+            name="botheredworries"
+            min="1"
+            max="5"
+            value="3"
+          />
+          <span>Very Bothered</span>
+          <div><span id="question5Value">3</span></div>
+        </div>
+        <br />
+
+        <!-- Question 12 -->
+        <div class="question">
+          <label for="question6"
+            >12. Do you find it difficult to concentrate on things?</label
+          ><br />
+          <span>Not Difficult</span>
+          <input
+            type="range"
+            id="question6"
+            name="concentration"
+            min="1"
+            max="5"
+            value="3"
+          />
+          <span>Very Difficult</span>
+          <div><span id="question6Value">3</span></div>
+        </div>
+        <br />
+
+        <!-- Question 13 -->
+        <div class="question">
+          <label for="question7"
+            >13. On a scale of 1-5, how often do you compare yourself to other
+            successful people through the use of social media?</label
+          ><br />
+          <span>Not Often</span>
+          <input
+            type="range"
+            id="question7"
+            name="comparison"
+            min="1"
+            max="5"
+            value="3"
+          />
+          <span>Very Often</span>
+          <div><span id="question7Value">3</span></div>
+        </div>
+        <br />
+
+        <!-- Question 14 -->
+        <div class="question">
+          <label for="question8"
+            >14. Following the previous question, how do you feel about these
+            comparisons, generally speaking?</label
+          ><br />
+          <span>No Feelings</span>
+          <input
+            type="range"
+            id="question8"
+            name="comparisonfeeling"
+            min="1"
+            max="5"
+            value="3"
+          />
+          <span>Strong Feelings</span>
+          <div><span id="question8Value">3</span></div>
+        </div>
+        <br />
+
+        <!-- Question 15 -->
+        <div class="question">
+          <label for="question9"
+            >15. How often do you look to seek validation from features of
+            social media?</label
+          ><br />
+          <span>Not Often</span>
+          <input
+            type="range"
+            id="question9"
+            name="validation"
+            min="1"
+            max="5"
+            value="3"
+          />
+          <span>Very Often</span>
+          <div><span id="question9Value">3</span></div>
+        </div>
+        <br />
+
+        <!-- Question 16 -->
+        <div class="question">
+          <label for="question10"
+            >16. How often do you feel depressed or down?</label
+          ><br />
+          <span>Not Often</span>
+          <input
+            type="range"
+            id="question10"
+            name="depression"
+            min="1"
+            max="5"
+            value="3"
+          />
+          <span>Very Often</span>
+          <div><span id="question10Value">3</span></div>
+        </div>
+        <br />
+
+        <!-- Question 17 -->
+        <div class="question">
+          <label for="question11"></label>
+            On a scale of 1 to 5, how frequently does your interest in daily
+            activities fluctuate?</label
+          ><br />
+          <span>Not Frequently</span>
+          <input
+            type="range"
+            id="question11"
+            name="interest"
+            min="1"
+            max="5"
+            value="3"
+          />
+          <span>Very Frequently</span>
+          <div><span id="question11Value">3</span></div>
+        </div>
+        <br />
+
+        <!-- Question 18 -->
+        <div class="question">
+          <label for="question12"
+            >18. On a scale of 1 to 5, how often do you face issues regarding sleep?</label
+          ><br />
+          <span>Not Often</span>
+          <input
+            type="range"
+            id="question12"
+            name="sleep"
+            min="1"
+            max="5"
+            value="3"
+          />
+          <span>Very Often</span>
+          <div><span id="question12Value">3</span></div>
+        </div>
+        <br />
       </div>
 
-      <!-- ... more questions ... -->
+         <!-- location -->
+         <div>
+          <label for="location">location:</label>
+          <select id="location" name="location">
+            <option value="Provo">Provo</option>
+            <option value="Other">Other</option>
+          </select>
+        </div>
+        <br><br>
 
       <input type="submit" value="Submit Survey" />
     </form>
+    <script>
+      document.querySelectorAll("input[type=range]").forEach((slider) => {
+        slider.oninput = () => {
+          document.getElementById(slider.id + "Value").textContent =
+            slider.value;
+        };
+      });
+    </script>
   </body>
 </html>
