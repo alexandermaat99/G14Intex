@@ -21,9 +21,9 @@ const knex = require("knex")({
   client: "pg",
   connection: {
     host: process.env.RDS_HOSTNAME || "localhost",
-    user: process.env.RDS_USERNAME || "pgadmin",
+    user: process.env.RDS_USERNAME || "postgres",
     password: process.env.RDS_PASSWORD || "admin",
-    database: process.env.RDS_DB_NAME || "intex",
+    database: process.env.RDS_DB_NAME || "testing",
     port: process.env.RDS_PORT || 5432,
     ssl: process.env.DB_SSL ? { rejectUnauthorized: false } : false,
   },
@@ -195,7 +195,7 @@ app.post("/submit-survey", async (req, res) => {
     // Begin transaction
     await knex.transaction(async (trx) => {
       // Insert into 'responses' table
-      const [responseIdObject] = await trx("responses")
+      const [responseIdObject] = await trx("responsesinfo")
         .insert({
           age: req.body.age,
           gender: req.body.gender,
@@ -225,16 +225,16 @@ app.post("/submit-survey", async (req, res) => {
       // Insert into 'socialmediaids' table for each selected social media
       const selectedSocialMedias = req.body.socialmediatypeid || [];
       for (const socialMediaTypeId of selectedSocialMedias) {
-        await trx("socialmediaids").insert({
+        await trx("socialmedia_link").insert({
           responseid: responseId, // This should now be an integer
-          socialmediatypeid: socialMediaTypeId,
+          socialmediaid: socialMediaTypeId,
         });
       }
 
       // Insert into 'orgids' table for each selected organization
       const selectedOrganizations = req.body.organizations || [];
       for (const organizationId of selectedOrganizations) {
-        await trx("orgids").insert({
+        await trx("org_link").insert({
           responseid: responseId,
           organizationid: organizationId,
         });
