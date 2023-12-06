@@ -1,0 +1,84 @@
+<!-- views/display-data.ejs -->
+
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Survey Data</title>
+    <link rel="stylesheet" type="text/css" href="styles.css">
+</head>
+<body>
+    <h1>Survey Data</h1>
+    <% if (isAdmin) { %>
+    <!-- Admin Controls -->
+    <form action="/filter-data" method="POST">
+        <label for="username">Select a specific person:</label>
+        <input type="text" id="username" name="username" placeholder="Enter username">
+        <input type="checkbox" id="displayAll" name="displayAll" value="true">
+        <label for="displayAll">Display all data</label>
+        <button type="submit">Apply Filters</button>
+    </form>
+    <% } %>
+    
+    <!-- Display Survey Data as a Table -->
+    <table class="survey-table">
+        <thead>
+            <tr>
+                <th>Age</th>
+                <th>Gender</th>
+                <th>Relationship</th>
+                <th>Occupation</th>
+                <th>Organizations Affiliated With</th>
+                <th>Use Social Media</th>
+                <th>Platforms Used</th>
+                <th>Avg. Time on Social Media (Daily)</th>
+                <th>Avg. Time Spent (1-10)</th>
+                <th>Frequency of Aimless Usage (1-10)</th>
+                <th>Restlessness Without SM (1-10)</th>
+                <th>Easily Distracted (1-10)</th>
+                <th>Bothered by Worries (1-10)</th>
+                <th>Difficulty Concentrating (1-10)</th>
+                <th>Comparison to Others (1-10)</th>
+                <th>Feelings About Comparisons (1-10)</th>
+                <th>Seek Validation (1-10)</th>
+                <th>Feel Depressed or Down (1-10)</th>
+                <th>Interest Fluctuation (1-10)</th>
+                <th>Sleep Issues (1-10)</th>
+            </tr>
+        </thead>
+        <tbody>
+            <% for (const entry of surveyData) { %>
+            <tr>
+                <td><%= entry.age %></td>
+                <td><%= entry.gender %></td>
+                <td><%= entry.relationship %></td>
+                <td><%= entry.occupation.join(', ') %></td>
+                <td><%= entry.organizations.join(', ') %></td>
+                <td><%= entry.usesocialmedia %></td>
+                <td><%= entry.platforms.join(', ') %></td>
+                <td><%= entry.avgtime %></td>
+                <td><%= entry.q8 %></td>
+                <td><%= entry.q9 %></td>
+                <td><%= entry.q10 %></td>
+                <td><%= entry.q11 %></td>
+                <td><%= entry.q12 %></td>
+                <td><%= entry.q13 %></td>
+                <td><%= entry.q14 %></td>
+                <td><%= entry.q15 %></td>
+                <td><%= entry.q16 %></td>
+                <td><%= entry.q17 %></td>
+                <td><%= entry.q18 %></td>
+                <td><%= entry.q19 %></td>
+            </tr>
+            <% } %>
+        </tbody>
+    </table>
+
+    <!-- Pagination Controls (if needed) -->
+    <div class="pagination">
+        <!-- Placeholder for pagination controls -->
+        <a href="#">Previous</a>
+        <span>Page 1 of 5</span>
+        <a href="#">Next</a>
+    </div>
+</body>
+</html>
