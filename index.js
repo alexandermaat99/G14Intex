@@ -21,9 +21,9 @@ const knex = require("knex")({
   client: "pg",
   connection: {
     host: process.env.RDS_HOSTNAME || "localhost",
-    user: process.env.RDS_USERNAME || "postgres",
-    password: process.env.RDS_PASSWORD || "admin",
-    database: process.env.RDS_DB_NAME || "testing",
+    user: process.env.RDS_USERNAME || "ebroot",
+    password: process.env.RDS_PASSWORD || "group14issupercool",
+    database: process.env.RDS_DB_NAME || "ebsb",
     port: process.env.RDS_PORT || 5432,
     ssl: process.env.RDS_SSL ? { rejectUnauthorized: false } : false,
   },
@@ -245,6 +245,18 @@ app.post("/submit-survey", async (req, res) => {
   } catch (error) {
     console.error("Error processing survey:", error);
     res.status(500).send("Error submitting survey");
+  }
+});
+
+app.get("/test-db", async (req, res) => {
+  try {
+    const result = await knex.select("*").from("users").limit(1);
+    res.json({ success: true, data: result });
+  } catch (error) {
+    console.error("Database connection error:", error);
+    res
+      .status(500)
+      .json({ success: false, message: "Database connection failed" });
   }
 });
 
