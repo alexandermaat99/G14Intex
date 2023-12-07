@@ -78,7 +78,10 @@ app.get("/login", (req, res) => {
 // POST login route
 // POST login route modified for session handling
 app.post("/login", async (req, res) => {
-  const { email, password } = req.body;
+  let { email, password } = req.body;
+
+  email = email.toUpperCase(); // Convert email to uppercase
+
   try {
     const user = await knex("users").where({ email }).first();
 
@@ -136,7 +139,13 @@ app.get("/dashboard", (req, res) => {
 // GET userPage Route
 app.get("/userPage", checkAuthentication, checkAdmin, async (req, res) => {
   try {
-    const users = await knex.select().from("users");
+    let query = knex.select().from("users");
+
+    if (req.query.sort) {
+      query = query.orderBy(req.query.sort, req.query.order || "asc");
+    }
+
+    const users = await query;
     res.render("userPage", { users: users });
   } catch (err) {
     console.error(err);
@@ -161,7 +170,7 @@ app.post("/addname", async (req, res) => {
 });
 
 // GET edit user route
-app.get("/editUser/:id", async (req, res) => {
+app.get("/editUser/:id", checkAuthentication, checkAdmin, async (req, res) => {
   try {
     const user = await knex("users").where("id", req.params.id).first();
     if (user) {
@@ -175,42 +184,73 @@ app.get("/editUser/:id", async (req, res) => {
   }
 });
 
-// POST edituser route
-app.post("/editUser/:id", async (req, res) => {
-  const { fName, lName, email, phone, password } = req.body;
+// POST editUser route - Admin Only
+app.post("/editUser/:id", checkAuthentication, checkAdmin, async (req, res) => {
+  let { fName, lName, email, phone, password, admin } = req.body;
+  fName = fName.toUpperCase();
+  lName = lName.toUpperCase();
+  email = email.toUpperCase();
+  const userId = req.params.id;
+
   try {
+    // Check if email already exists for another user
+    const existingUser = await knex("users")
+      .where("email", email)
+      .andWhere("id", "!=", userId)
+      .first();
+
+    if (existingUser) {
+      // Email already in use by another account
+      // Redirect to the emailError page
+      return res.render("emailError");
+    }
+
+    // Proceed with updating the user's information
     await knex("users")
-      .where("id", req.params.id)
-      .update({ fName, lName, email, phone, password });
-    res.redirect("/userPage");
-  } catch (err) {
-    console.error(err);
-    res.status(500).send("Error updating user");
+      .where("id", userId)
+      .update({ fName, lName, email, phone, password, admin });
+
+    const updatedUser = await knex("users").where("id", userId).first();
+    res.render("editUser", {
+      user: updatedUser,
+      success: "User updated successfully.",
+    });
+  } catch (error) {
+    console.error(error);
+    const user = await knex("users").where("id", userId).first();
+    res.render("editUser", {
+      user,
+      error: "Error updating user. Please try again.",
+    });
   }
 });
 
 // GET add user route
-app.get("/addUser", (req, res) => {
+app.get("/addUser", checkAuthentication, checkAdmin, (req, res) => {
   res.render("addUser");
 });
 
 // POST add user route
-app.post("/addUser", async (req, res) => {
-  const { fName, lName, email, phone, password } = req.body;
+app.post("/addUser", checkAuthentication, checkAdmin, async (req, res) => {
+  let { fName, lName, email, phone, password } = req.body;
+  fName = fName.toUpperCase();
+  lName = lName.toUpperCase();
+  email = email.toUpperCase();
+
   try {
+    // Check if email already exists
+    const existingUser = await knex("users").where("email", email).first();
+    if (existingUser) {
+      // Email already in use by another account
+      // Redirect to the emailError page
+      return res.render("emailError");
+    }
+
     // Add the user to the database
-    // Note: You should hash the password before storing it
     const newUser = await knex("users")
-      .insert({
-        fName,
-        lName,
-        email,
-        phone,
-        password, // Ideally, hash this password before storing
-      })
+      .insert({ fName, lName, email, phone, password }) // Hash password before storing
       .returning("*");
 
-    // Redirect to the user page or display a success message
     res.redirect("/userPage");
   } catch (err) {
     console.error(err.message);
@@ -219,15 +259,20 @@ app.post("/addUser", async (req, res) => {
 });
 
 // POST delete User Route
-app.post("/deleteUser/:id", async (req, res) => {
-  try {
-    await knex("users").where("id", req.params.id).del();
-    res.redirect("/userPage");
-  } catch (err) {
-    console.error(err);
-    res.status(500).send("Error deleting user");
+app.post(
+  "/deleteUser/:id",
+  checkAuthentication,
+  checkAdmin,
+  async (req, res) => {
+    try {
+      await knex("users").where("id", req.params.id).del();
+      res.redirect("/userPage");
+    } catch (err) {
+      console.error(err);
+      res.status(500).send("Error deleting user");
+    }
   }
-});
+);
 
 //survey route
 app.post("/submit-survey", async (req, res) => {
@@ -378,11 +423,7 @@ app.post("/edit-account", checkAuthentication, checkAdmin, async (req, res) => {
       .first();
 
     if (existingUser) {
-      // Email already in use by another account
-      return res.render("edit_acct", {
-        user: req.body,
-        error: "Email already in use by another account.",
-      });
+      return res.render("emailError");
     }
 
     // Proceed with updating the user's information
@@ -440,11 +481,7 @@ app.post("/edit-account2", checkAuthentication, async (req, res) => {
       .first();
 
     if (existingUser) {
-      // Email already in use by another account
-      return res.render("edit_acct", {
-        user: req.body,
-        error: "Email already in use by another account.",
-      });
+      return res.render("emailError");
     }
 
     // Proceed with updating the user's information

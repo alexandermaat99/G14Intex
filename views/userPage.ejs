@@ -6,11 +6,38 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Document</title>
-    <link rel="stylesheet" href="/public/css/user.css" />
+    <link rel="stylesheet" href="/public/css/userHome.css" />
   </head>
   <body>
-    <label><b>Users</b></label>
+    <div class="navbar-container">
+      <ul class="navbar">
+        <li><a href="/edit-account" class="not-active">Account</a></li>
+        <li><a href="/admin/data" class="not-active">Records</a></li>
+        <li><a class="active">Users</a></li>
+        <li><a href="/admin_home" class="not-active">Dashboard</a></li>
+      </ul>
+    </div>
+
+    <p>Alphabetize by:</p>
+    <th style="text-align: left">
+      <a href="?sort=fName&order=asc">First Name</a>
+    </th>
+
+    <th style="text-align: left">
+      <a href="?sort=lName&order=asc">Last Name</a>
+    </th>
     <br /><br />
+    <p>Search by last name:</p>
+    <input
+      type="text"
+      id="searchBox"
+      placeholder="Search by last name..."
+      onkeyup="searchName()"
+    />
+    <br />
+
+    <!-- Other headers -->
+
     <table
       style="width: 100%; background-color: aquamarine; border: 1px solid black"
     >
@@ -21,6 +48,7 @@
           <th style="text-align: left">email</th>
           <th style="text-align: left">phone</th>
           <th style="text-align: left">password</th>
+          <th style="text-align: left">admin</th>
           <th></th>
           <th></th>
         </tr>
@@ -33,6 +61,7 @@
           <td><%= users[i].email %></td>
           <td><%= users[i].phone %></td>
           <td><%= users[i].password %></td>
+          <td><%= users[i].admin %></td>
           <td>
             <form action="/editUser/<%= users[i].id %>" method="GET">
               <button type="submit">Edit</button>
@@ -51,15 +80,38 @@
         <% } %>
       </tbody>
       <br /><br />
-      <form action="/addUser" method="GET">
-        <button type="submit">Add New User</button>
-      </form>
     </table>
+    <br /><br />
+
+    <form style="text-align: right" action="/addUser" method="GET">
+      <button type="submit">Add New User</button>
+    </form>
     <script>
       function confirmDelete() {
         return confirm(
           "Are you sure you want to delete this record permanently?"
         );
+      }
+      function searchName() {
+        var input, filter, table, tr, td, i, txtValue;
+        input = document.getElementById("searchBox");
+        filter = input.value.toUpperCase();
+        table = document.getElementsByTagName("table")[0];
+        tr = table.getElementsByTagName("tr");
+
+        // Loop through all table rows, and hide those who don't match the search query
+        for (i = 1; i < tr.length; i++) {
+          // Start from 1 to skip the header row
+          td = tr[i].getElementsByTagName("td")[1]; // Assuming you want to search by first name
+          if (td) {
+            txtValue = td.textContent || td.innerText;
+            if (txtValue.toUpperCase().indexOf(filter) > -1) {
+              tr[i].style.display = "";
+            } else {
+              tr[i].style.display = "none";
+            }
+          }
+        }
       }
     </script>
   </body>
