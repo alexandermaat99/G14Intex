@@ -232,7 +232,7 @@ app.get("/addUser", checkAuthentication, checkAdmin, (req, res) => {
 
 // POST add user route
 app.post("/addUser", checkAuthentication, checkAdmin, async (req, res) => {
-  let { fName, lName, email, phone, password } = req.body;
+  let { fName, lName, email, phone, password, admin } = req.body;
   fName = fName.toUpperCase();
   lName = lName.toUpperCase();
   email = email.toUpperCase();
@@ -248,7 +248,7 @@ app.post("/addUser", checkAuthentication, checkAdmin, async (req, res) => {
 
     // Add the user to the database
     const newUser = await knex("users")
-      .insert({ fName, lName, email, phone, password }) // Hash password before storing
+      .insert({ fName, lName, email, phone, password, admin }) // Hash password before storing
       .returning("*");
 
     res.redirect("/userPage");
@@ -377,11 +377,36 @@ app.get("/response-detail/:id", async (req, res) => {
     const response = await knex("responsesinfo")
       .where("responseid", responseId)
       .first();
-    if (response) {
-      res.render("response_detail", { response });
-    } else {
-      res.status(404).send("Response not found");
+
+    if (!response) {
+      return res.status(404).send("Response not found");
     }
+
+    // Query for social media information
+    const socialMedia = await knex("socialmedia_link")
+      .join(
+        "socialmediainfo",
+        "socialmediainfo.socialmediaid",
+        "socialmedia_link.socialmediaid"
+      )
+      .where("socialmedia_link.responseid", responseId)
+      .select("socialmediainfo.platformname");
+
+    // Query for organization information
+    const organizations = await knex("org_link")
+      .join(
+        "organizationinfo",
+        "organizationinfo.organizationid",
+        "org_link.organizationid"
+      )
+      .where("org_link.responseid", responseId)
+      .select("organizationinfo.orgaffil");
+    // Render the page with response, social media, and organization data
+    res.render("response_detail", {
+      response,
+      socialMedia,
+      organizations,
+    });
   } catch (err) {
     console.error(err);
     res.status(500).send("Error retrieving response data");

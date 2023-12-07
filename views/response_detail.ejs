@@ -1,4 +1,3 @@
-<!-- response_detail.ejs -->
 <!DOCTYPE html>
 <html>
   <head>
@@ -6,12 +5,77 @@
     <link rel="stylesheet" href="/public/css/userHome.css" />
   </head>
   <body>
+    <a href="/admin/data" class="back-to-userpage-button">Back to Records</a>
     <h1>Response Detail for ID: <%= response.responseid %></h1>
-    <p><strong>Timestamp:</strong> <%= response.timestamp %></p>
-    <p><strong>Location:</strong> <%= response.location %></p>
-    <!-- Add other fields here -->
-    <p><strong>Age:</strong> <%= response.age %></p>
-    <p><strong>Gender:</strong> <%= response.gender %></p>
+
+    <table style="width: 80vw">
+      <tr>
+        <td><strong>Timestamp:</strong></td>
+        <td><%= response.timestamp %></td>
+      </tr>
+      <tr>
+        <td><strong>Location:</strong></td>
+        <td><%= response.location %></td>
+      </tr>
+      <tr>
+        <td><strong>Age:</strong></td>
+        <td><%= response.age %></td>
+      </tr>
+      <tr>
+        <td><strong>Gender:</strong></td>
+        <td><%= response.gender %></td>
+      </tr>
+      <tr>
+        <td><strong>Relationship status:</strong></td>
+        <td><%= response.relationship %></td>
+      </tr>
+      <tr>
+        <td><strong>Occupation status:</strong></td>
+        <td><%= response.occupation %></td>
+      </tr>
+      <tr>
+        <td><strong>Do you use social media?:</strong></td>
+        <td><%= response.socialmediause %></td>
+      </tr>
+      <tr>
+        <td>
+          <strong
+            >What is the average time you spend on social media every
+            day?:</strong
+          >
+        </td>
+        <td><%= response.avgtime %></td>
+      </tr>
+      <!-- Inside response_detail.ejs -->
+      <tr>
+        <td><strong>Social Media Platforms:</strong></td>
+        <td>
+          <% if(socialMedia.length > 0) { %>
+          <ul>
+            <% socialMedia.forEach(media => { %>
+            <li><%= media.platformname %></li>
+            <% }) %>
+          </ul>
+          <% } else { %> None <% } %>
+        </td>
+      </tr>
+
+      <!-- Organizations Section -->
+      <tr>
+        <td><strong>Organizations:</strong></td>
+        <td>
+          <% if(organizations.length > 0) { %>
+          <ul>
+            <% organizations.forEach(org => { %>
+            <li><%= org.orgaffil %></li>
+            <% }) %>
+          </ul>
+          <% } else { %> None <% } %>
+        </td>
+      </tr>
+      <!-- Continue with the rest of the fields in the same manner -->
+    </table>
+
     <!-- Continue adding fields as necessary -->
   </body>
 </html>

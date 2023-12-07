@@ -1,9 +1,9 @@
 body {
   font-family: Arial, sans-serif;
-  background-color: #ffffff;
+  background-color: #1b1247;
   margin: 0 auto; /* Centering horizontally */
   padding: 0;
-  color: #333;
+  color: white;
   display: flex; /* Using flexbox */
   flex-direction: column; /* Stacking children vertically */
   align-items: center; /* Centering content horizontally */
@@ -25,12 +25,12 @@ ul.navbar {
 h1,
 h2,
 h3 {
-  color: #333;
+  color: #67d633;
   text-align: center;
 }
 
 a {
-  color: #007bff;
+  color: #67d633;
   text-decoration: none;
   border-radius: 4px;
   margin-top: 2vh;
@@ -56,14 +56,14 @@ ul.navbar li {
 
 ul.navbar li a {
   display: block;
-  color: black;
+  color: white;
   text-align: center;
   padding: 14px 16px;
   text-decoration: none;
 }
 
 .not-active:hover {
-  background-color: #b8daffb3;
+  background-color: #80808024;
   cursor: pointer;
 }
 
@@ -74,7 +74,7 @@ ul.navbar li.selected {
 
 /* Style for the active page */
 ul.navbar li a.active {
-  background-color: #007bff;
+  background-color: #67d633;
   color: white;
 }
 
@@ -96,7 +96,7 @@ form {
   max-width: 25vw; /* Set the maximum width of the form */
   margin: 0.5vw auto; /* Centering the form */
   padding: 2vw;
-  background-color: rgb(235, 246, 255);
+  background-color: #80808035;
   border-radius: 8px;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
@@ -124,7 +124,7 @@ select {
 }
 
 button {
-  background-color: #007bff;
+  background-color: #67d633;
   color: white;
   padding: 10px 20px;
   border: none;
@@ -133,7 +133,7 @@ button {
 }
 
 button:hover {
-  background-color: #0056b3;
+  background-color: #5cb832;
 }
 
 table {
@@ -145,17 +145,20 @@ table {
 th,
 td {
   padding: 10px;
-  border: 1px solid #ddd;
+  border: 1px solid #67d633;
   text-align: left;
 }
 
 th {
-  background-color: #333;
+  background-color: #5cb832;
   color: white;
 }
 
 tbody tr:nth-child(odd) {
-  background-color: #f4f4f4;
+  background-color: #80808035;
+}
+tbody tr:nth-child(even) {
+  background-color: #80808065;
 }
 
 .error-message {
@@ -178,7 +181,7 @@ tbody tr:nth-child(odd) {
 }
 
 #logoutForm button {
-  background-color: rgb(242, 62, 62);
+  background-color: #ff5722;
   color: white;
   border: none; /* Removes border */
   padding: 10px; /* Removes padding */
@@ -186,7 +189,7 @@ tbody tr:nth-child(odd) {
   width: 20vw;
 }
 #logoutForm button:hover {
-  background-color: rgb(254, 18, 18);
+  background-color: #e34a1b;
 }
 
 #subButton {
