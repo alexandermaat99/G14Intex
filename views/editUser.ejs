@@ -7,7 +7,9 @@
     <link rel="stylesheet" href="/public/css/userHome.css" />
   </head>
   <body>
-    <h1>Edit User</h1>
+    <div class="header-container">
+      <h1>Edit User</h1>
+    </div>
     <form action="/editUser/<%= user.id %>" method="POST">
       <label for="fName">First Name:</label>
       <input
@@ -66,6 +68,7 @@
       <button type="submit">Update User</button>
     </form>
     <a href="/userPage" class="back-button">Back to User Page</a>
+
     <% if (typeof success !== 'undefined' && success) { %>
     <script>
       alert("<%= success %>");

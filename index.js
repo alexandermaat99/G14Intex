@@ -464,6 +464,7 @@ app.get("/edit-account2", checkAuthentication, async (req, res) => {
 });
 
 // POST route for updating user account information
+// POST route for updating user account information
 app.post("/edit-account2", checkAuthentication, async (req, res) => {
   const userId = req.session.userId;
   let { fName, lName, email, phone, password } = req.body;
@@ -489,18 +490,31 @@ app.post("/edit-account2", checkAuthentication, async (req, res) => {
       .where("id", userId)
       .update({ fName, lName, email, phone, password });
 
+    // Fetch updated user info to check if they are admin or not
+    const updatedUser = await knex("users").where("id", userId).first();
+
     // Render the same page with a success message
-    res.render("edit_acct", {
-      user: req.body,
-      success: "Account updated successfully.",
-    });
+    if (updatedUser.admin) {
+      res.render("edit_acct_user", {
+        user: req.body,
+        success: "Account updated successfully.",
+        redirectPath: "/admin_home", // Redirect to admin home if user is an admin
+      });
+    } else {
+      res.render("edit_acct_user", {
+        user: req.body,
+        success: "Account updated successfully.",
+        redirectPath: "/user_home", // Redirect to user home if user is not an admin
+      });
+    }
   } catch (error) {
     console.error(error);
 
     // Render the page with an error message instead of sending a separate response
-    res.render("edit_acct", {
+    res.render("edit_acct_user", {
       user: req.body,
       error: "Error updating account. Please try again.",
+      redirectPath: updatedUser.admin ? "/admin_home" : "/user_home",
     });
   }
 });

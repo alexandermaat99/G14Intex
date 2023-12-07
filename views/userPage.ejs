@@ -6,7 +6,7 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Document</title>
-    <link rel="stylesheet" href="/public/css/userHome.css" />
+    <link rel="stylesheet" href="/public/css/userData.css" />
   </head>
   <body>
     <div class="navbar-container">
@@ -18,30 +18,30 @@
       </ul>
     </div>
 
-    <p>Alphabetize by:</p>
-    <th style="text-align: left">
-      <a href="?sort=fName&order=asc">First Name</a>
-    </th>
+    <div class="search-alphabetize-container">
+      <div class="alphabetize-section">
+        <p id="alpha">Alphabetize by:</p>
+        <a href="?sort=fName&order=asc">First Name</a> |
+        <a href="?sort=lName&order=asc">Last Name</a>
+      </div>
 
-    <th style="text-align: left">
-      <a href="?sort=lName&order=asc">Last Name</a>
-    </th>
-    <br /><br />
-    <p>Search by last name:</p>
-    <input
-      type="text"
-      id="searchBox"
-      placeholder="Search by last name..."
-      onkeyup="searchName()"
-    />
-    <br />
+      <div class="search-section">
+        <p>Search by last name:</p>
+        <input
+          type="text"
+          id="searchBox"
+          placeholder="Search by last name..."
+          onkeyup="searchName()"
+        />
+      </div>
+    </div>
 
     <!-- Other headers -->
 
     <table
-      style="width: 100%; background-color: aquamarine; border: 1px solid black"
+      style="width: 80vw; background-color: #b8daffb3; border: 1px solid black"
     >
-      <thead style="background-color: red; color: white">
+      <thead>
         <tr>
           <th style="text-align: left">First Name</th>
           <th style="text-align: left">Last Name</th>
@@ -64,7 +64,7 @@
           <td><%= users[i].admin %></td>
           <td>
             <form action="/editUser/<%= users[i].id %>" method="GET">
-              <button type="submit">Edit</button>
+              <button type="submit" class="edit-button">Edit</button>
             </form>
           </td>
           <td>
@@ -73,7 +73,7 @@
               method="POST"
               onsubmit="return confirmDelete()"
             >
-              <button type="submit">Delete</button>
+              <button type="submit" class="delete-button">Delete</button>
             </form>
           </td>
         </tr>
