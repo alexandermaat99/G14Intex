@@ -1,0 +1,412 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Social Media Usage Survey</title>
+    <link rel="stylesheet" type="text/css" href="styles.css" />
+  </head>
+  <body>
+    <h1>Social Media Usage Survey</h1>
+    <form action="submit_survey.php" method="POST">
+      <!-- Age -->
+      <label for="age">Age:</label>
+      <input type="number" id="age" name="age" required /><br /><br />
+
+      <!-- Gender -->
+      <fieldset>
+        <label>Gender:</label><br />
+        <input type="radio" id="male" name="gender" value="male" />
+        <label for="male">Male</label><br />
+        <input type="radio" id="female" name="gender" value="female" />
+        <label for="female">Female</label><br />
+        <input type="radio" id="nonbinary" name="gender" value="non-binary" />
+        <label for="nonbinary">Non-binary</label><br />
+        <input type="radio" id="other" name="gender" value="other" />
+        <label for="other">Other</label><br /><br />
+      </fieldset>
+      <br />
+
+      <!-- Relationship -->
+      <fieldset>
+        <label>Relationship:</label><br />
+        <input
+          type="radio"
+          id="inrelationship"
+          name="relationship"
+          value="in a relationship"
+        />
+        <label for="inrelationship">In a Relationship</label><br />
+        <input type="radio" id="single" name="relationship" value="single" />
+        <label for="single">Single</label><br />
+        <input type="radio" id="married" name="relationship" value="married" />
+        <label for="married">Married</label><br />
+        <input
+          type="radio"
+          id="divorced"
+          name="relationship"
+          value="divorced"
+        />
+        <label for="divorced">Divorced</label><br /><br />
+      </fieldset>
+      <br />
+
+      <!-- Occupation -->
+      <fieldset>
+        <label>Occupation:</label><br />
+        <input
+          type="checkbox"
+          id="universitystudent"
+          name="occupation[]"
+          value="university student"
+        />
+        <label for="universitystudent">University Student</label><br />
+        <input
+          type="checkbox"
+          id="schoolstudent"
+          name="occupation[]"
+          value="school student"
+        />
+        <label for="schoolstudent">School Student</label><br />
+        <input
+          type="checkbox"
+          id="salariedworker"
+          name="occupation[]"
+          value="salaried worker"
+        />
+        <label for="salariedworker">Salaried Worker</label><br />
+        <input
+          type="checkbox"
+          id="retired"
+          name="occupation[]"
+          value="retired"
+        />
+        <label for="retired">Retired</label><br /><br />
+      </fieldset>
+      <br />
+
+      <!-- Organizations Affiliated With -->
+      <fieldset>
+        <label for="organizations">Organizations Affiliated With:</label><br />
+        <select id="organizations" name="organizations[]" multiple>
+          <option value="university">University</option>
+          <option value="government">Government</option>
+          <option value="private">Private</option>
+          <option value="company">Company</option>
+          <option value="N/A">N/A</option>
+        </select>
+      </fieldset>
+      <br />
+
+      <!-- Do you use social media -->
+      <fieldset>
+        <label for="usesocialmedia">Do you use social media?</label><br />
+        <input
+          type="radio"
+          id="yes"
+          name="usesocialmedia"
+          value="yes"
+          required
+        />
+        <label for="yes">Yes</label><br />
+        <input type="radio" id="no" name="usesocialmedia" value="no" />
+        <label for="no">No</label>
+      </fieldset>
+      <br />
+
+      <!-- Platforms Used -->
+      <fieldset>
+        <label>Which platforms do you use (Select multiple):</label><br />
+        <input type="checkbox" id="tiktok" name="platforms[]" value="tiktok" />
+        <label for="tiktok">TikTok</label><br />
+        <input
+          type="checkbox"
+          id="facebook"
+          name="platforms[]"
+          value="facebook"
+        />
+        <label for="facebook">Facebook</label><br />
+        <input
+          type="checkbox"
+          id="instagram"
+          name="platforms[]"
+          value="instagram"
+        />
+        <label for="instagram">Instagram</label><br />
+        <input
+          type="checkbox"
+          id="discord"
+          name="platforms[]"
+          value="discord"
+        />
+        <label for="discord">Discord</label><br />
+        <input
+          type="checkbox"
+          id="snapchat"
+          name="platforms[]"
+          value="snapchat"
+        />
+        <label for="snapchat">Snapchat</label><br />
+        <input
+          type="checkbox"
+          id="twitter"
+          name="platforms[]"
+          value="twitter"
+        />
+        <label for="twitter">Twitter</label><br />
+        <input
+          type="checkbox"
+          id="youtube"
+          name="platforms[]"
+          value="youtube"
+        />
+        <label for="youtube">YouTube</label><br />
+        <input type="checkbox" id="reddit" name="platforms[]" value="reddit" />
+        <label for="reddit">Reddit</label><br />
+        <input
+          type="checkbox"
+          id="pinterest"
+          name="platforms[]"
+          value="pinterest"
+        />
+        <label for="pinterest">Pinterest</label>
+      </fieldset>
+      <br />
+
+      <!-- Average Time on Social Media -->
+      <fieldset>
+        <label for="avgtime"
+          >Average time you spend on social media every day:</label
+        ><br />
+        <select id="avgtime" name="avgtime">
+          <option value="2-3">Between 2 and 3 hours</option>
+          <option value="5+">More than 5 hours</option>
+          <option value="3-4">Between 3 and 4 hours</option>
+          <option value="1">Less than an Hour</option>
+          <option value="1-2">Between 1 and 2 hours</option>
+          <option value="4-5">Between 4 and 5 hours</option>
+        </select>
+      </fieldset>
+      <br />
+
+      <!-- Question 8 -->
+      <label for="q8"
+        >On a scale of 1 to 5, what is the average time you spend on social
+        media every day?</label
+      >
+      <div class="slider-container">
+        <input
+          type="range"
+          id="q8"
+          name="q8"
+          min="1"
+          max="5"
+          onchange="outputUpdate('q8', this.value)"
+        />
+        <label class="slider-label" id="q8-label">3</label>
+      </div>
+      <br /><br />
+
+      <!-- Question 9 -->
+      <label for="q9"
+        >On a scale of 1 to 5, how often do you find yourself using social media
+        without a specific purpose?</label
+      >
+      <div class="slider-container">
+        <input
+          type="range"
+          id="q9"
+          name="q9"
+          min="1"
+          max="5"
+          onchange="outputUpdate('q9', this.value)"
+        />
+        <label class="slider-label" id="q9-label">3</label>
+      </div>
+      <br /><br />
+
+      <!-- Question 10 -->
+      <label for="q10"
+        >On a scale of 1 to 5, do you feel restless if you haven't used social
+        media in a while?</label
+      >
+      <div class="slider-container">
+        <input
+          type="range"
+          id="q10"
+          name="q10"
+          min="1"
+          max="5"
+          onchange="outputUpdate('q10', this.value)"
+        />
+        <label class="slider-label" id="q10-label">3</label>
+      </div>
+      <br /><br />
+
+      <!-- Question 11 -->
+      <label for="q11"
+        >On a scale of 1 to 5, how easily distracted are you?</label
+      >
+      <div class="slider-container">
+        <input
+          type="range"
+          id="q11"
+          name="q11"
+          min="1"
+          max="5"
+          onchange="outputUpdate('q11', this.value)"
+        />
+        <label class="slider-label" id="q11-label">3</label>
+      </div>
+      <br /><br />
+
+      <!-- Question 12 -->
+      <label for="q12"
+        >On a scale of 1 to 5, how much are you bothered by worries?</label
+      >
+      <div class="slider-container">
+        <input
+          type="range"
+          id="q12"
+          name="q12"
+          min="1"
+          max="5"
+          onchange="outputUpdate('q12', this.value)"
+        />
+        <label class="slider-label" id="q12-label">3</label>
+      </div>
+      <br /><br />
+
+      <!-- Question 13 -->
+      <label for="q13"
+        >On a scale of 1 to 5, do you find it difficult to concentrate on
+        things?</label
+      >
+      <div class="slider-container">
+        <input
+          type="range"
+          id="q13"
+          name="q13"
+          min="1"
+          max="5"
+          onchange="outputUpdate('q13', this.value)"
+        />
+        <label class="slider-label" id="q13-label">3</label>
+      </div>
+      <br /><br />
+
+      <!-- Question 14 -->
+      <label for="q14"
+        >On a scale of 1 to 5, how often do you compare yourself to other
+        successful people through the use of social media?</label
+      >
+      <div class="slider-container">
+        <input
+          type="range"
+          id="q14"
+          name="q14"
+          min="1"
+          max="5"
+          onchange="outputUpdate('q14', this.value)"
+        />
+        <label class="slider-label" id="q14-label">3</label>
+      </div>
+      <br /><br />
+
+      <!-- Question 15 -->
+      <label for="q15"
+        >On a scale of 1 to 5, following the previous question, how do you feel
+        about these comparisons, generally speaking?</label
+      >
+      <div class="slider-container">
+        <input
+          type="range"
+          id="q15"
+          name="q15"
+          min="1"
+          max="5"
+          onchange="outputUpdate('q15', this.value)"
+        />
+        <label class="slider-label" id="q15-label">3</label>
+      </div>
+      <br /><br />
+
+      <!-- Question 16 -->
+      <label for="q16"
+        >On a scale of 1 to 5, how often do you look to seek validation from
+        features of social media?</label
+      >
+      <div class="slider-container">
+        <input
+          type="range"
+          id="q16"
+          name="q16"
+          min="1"
+          max="5"
+          onchange="outputUpdate('q16', this.value)"
+        />
+        <label class="slider-label" id="q16-label">3</label>
+      </div>
+      <br /><br />
+
+      <!-- Question 17 -->
+      <label for="q17"
+        >On a scale of 1 to 5, how often do you feel depressed or down?</label
+      >
+      <div class="slider-container">
+        <input
+          type="range"
+          id="q17"
+          name="q17"
+          min="1"
+          max="5"
+          onchange="outputUpdate('q17', this.value)"
+        />
+        <label class="slider-label" id="q17-label">3</label>
+      </div>
+      <br /><br />
+
+      <!-- Question 18 -->
+      <label for="q18"
+        >On a scale of 1 to 5, how frequently does your interest in daily
+        activities fluctuate?</label
+      >
+      <div class="slider-container">
+        <input
+          type="range"
+          id="q18"
+          name="q18"
+          min="1"
+          max="5"
+          onchange="outputUpdate('q18', this.value)"
+        />
+        <label class="slider-label" id="q18-label">3</label>
+      </div>
+      <br /><br />
+
+      <!-- Question 19 -->
+      <label for="q19"
+        >On a scale of 1 to 5, how often do you face issues regarding
+        sleep?</label
+      >
+      <div class="slider-container">
+        <input
+          type="range"
+          id="q19"
+          name="q19"
+          min="1"
+          max="5"
+          onchange="outputUpdate('q19', this.value)"
+        />
+        <label class="slider-label" id="q19-label">3</label>
+      </div>
+      <br /><br />
+
+      <input type="submit" value="Submit" />
+
+      <script>
+        function outputUpdate(id, vol) {
+          document.getElementById(id + "-label").innerHTML = vol;
+        }
+      </script>
+    </form>
+  </body>
+</html>

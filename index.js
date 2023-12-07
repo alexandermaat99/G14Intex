@@ -76,45 +76,51 @@ app.get("/login", (req, res) => {
 });
 
 // POST login route
+// POST login route modified for session handling
 app.post("/login", async (req, res) => {
   const { email, password } = req.body;
   try {
-    console.log("Received email:", email);
-    console.log("Received password:", password);
-
     const user = await knex("users").where({ email }).first();
-
-    console.log("User from the database:", user);
 
     if (!user) {
       // User not found
-      console.log("User not found");
       const error = "Invalid credentials";
       return res.render("login", { error });
     }
 
-    console.log("Hashed Password from DB:", user.password);
-
-    // const passwordMatch = await bcrypt.compare(password, user.password);
     const passwordMatch = user.password === password;
+
     if (passwordMatch) {
       // Authentication successful
-      console.log("Authentication successful");
-      // Create a session or JWT token to manage user sessions
-      // Redirect to a protected user page or perform other actions as needed
       req.session.userId = user.id;
-      req.session.isAdmin = user.admin; // Assuming there's an 'admin' field in your user schema
-      res.redirect("/dashboard");
+      req.session.isAdmin = user.admin;
+
+      if (user.admin) {
+        // Redirect to admin_home.ejs for admin users
+        return res.redirect("/admin_home");
+      } else {
+        // Redirect to user_home.ejs for non-admin users
+        return res.redirect("/user_home");
+      }
     } else {
       // Incorrect password
-      console.log("Incorrect password");
       const error = "Invalid credentials";
-      res.render("login", { error });
+      return res.render("login", { error });
     }
   } catch (error) {
     console.error(error.message);
     res.status(500).send("Server error");
   }
+});
+
+// GET route for user home page
+app.get("/admin_home", (req, res) => {
+  res.render("admin_home"); // Assuming you have a user_home.ejs file
+});
+
+// GET route for user home page
+app.get("/user_home", (req, res) => {
+  res.render("user_home"); // Assuming you have a user_home.ejs file
 });
 
 // GET route to survery page
@@ -128,7 +134,7 @@ app.get("/dashboard", (req, res) => {
 });
 
 // GET userPage Route
-app.get("/userPage", async (req, res) => {
+app.get("/userPage", checkAuthentication, checkAdmin, async (req, res) => {
   try {
     const users = await knex.select().from("users");
     res.render("userPage", { users: users });
