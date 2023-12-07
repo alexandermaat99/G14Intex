@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Edit Account</title>
+    <link rel="stylesheet" href="/public/css/style.css" />
+    <!-- Adjust the path as needed -->
+  </head>
+  <body>
+    <div class="container">
+      <h1>Edit Account</h1>
+
+      <!-- first name -->
+      <form action="/edit-account" method="post">
+        <div class="form-group">
+          <label for="fName">First Name:</label>
+          <input
+            type="text"
+            id="fName"
+            name="fName"
+            value="<%= user.fName %>"
+            required
+          />
+        </div>
+        <br />
+
+        <!-- last name -->
+        <div class="form-group">
+          <label for="username">Last Name:</label>
+          <input
+            type="text"
+            id="lName"
+            name="lName"
+            value="<%= user.lName %>"
+            required
+          />
+        </div>
+        <br />
+
+        <!-- email address -->
+        <div class="form-group">
+          <label for="email">Email:</label>
+          <input
+            type="email"
+            id="email"
+            name="email"
+            value="<%= user.email %>"
+            required
+          />
+        </div>
+        <br />
+
+        <!-- phone number  -->
+        <div class="form-group">
+          <label for="phone">Phone Number:</label>
+          <input
+            type="phone"
+            id="phone"
+            name="phone"
+            value="<%= user.phone %>"
+            required
+          />
+        </div>
+        <br />
+
+        <!-- password -->
+        <div class="form-group">
+          <label for="password">Password:</label>
+          <input
+            type="password"
+            id="password"
+            name="password"
+            value="<%= user.password %>"
+            required
+          />
+        </div>
+        <br />
+
+        <div id="role">Role: "<%= user.admin ? 'Admin' : 'User' %>"</div>
+
+        <br />
+
+        <!-- Add additional fields as necessary -->
+        <div class="form-group">
+          <button type="submit">Update Account</button>
+        </div>
+      </form>
+    </div>
+    <br />
+
+    <form action="/logout" method="post" id="logoutForm">
+      <button type="button" onclick="confirmLogout()">Logout</button>
+    </form>
+    <br />
+
+    <!-- Success Message Display -->
+    <% if (typeof success !== 'undefined' && success) { %>
+    <script>
+      alert("<%= success %>");
+    </script>
+    <% } %>
+
+    <!-- Error Message Display -->
+    <% if (typeof error !== 'undefined' && error) { %>
+    <script>
+      alert("<%= error %>");
+    </script>
+    <% } %>
+
+    <script>
+      function confirmLogout() {
+        if (confirm("Are you sure you want to log out?")) {
+          document.getElementById("logoutForm").submit();
+        }
+      }
+    </script>
+  </body>
+</html>

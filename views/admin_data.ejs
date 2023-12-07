@@ -1,4 +1,3 @@
-<!-- admin_data.ejs -->
 <!DOCTYPE html>
 <html>
   <head>
@@ -6,7 +5,39 @@
   </head>
   <body>
     <h1>Responses Overview</h1>
+
+    <!-- Filter and Search Forms -->
+    <form action="/admin/data" method="get" style="margin-bottom: 20px">
+      <!-- Filter by Location Dropdown -->
+      <label for="locationFilter">Filter by Location:</label>
+      <select id="locationFilter" name="location">
+        <option value="">All Locations</option>
+        <option value="Plainsville">Plainsville</option>
+        <option value="Provo">Provo</option>
+        <option value="Other">Other</option>
+      </select>
+
+      <!-- Search by Response ID -->
+      <label for="responseIdSearch">Search Response ID:</label>
+      <input
+        type="number"
+        id="responseIdSearch"
+        name="responseid"
+        placeholder="Enter Response ID"
+      />
+
+      <!-- Filter/Search Button -->
+      <button type="submit">Apply</button>
+
+      <!-- Reset Button to Show All Data -->
+      <button type="button" onclick="window.location.href='/admin/data'">
+        Reset Filter
+      </button>
+    </form>
+
+    <!-- Data Table -->
     <table border="1">
+      <!-- Table Headers -->
       <thead>
         <tr>
           <th>Response ID</th>
@@ -14,6 +45,7 @@
           <th>Location</th>
         </tr>
       </thead>
+      <!-- Table Body -->
       <tbody>
         <% data.forEach(function(response) { %>
         <tr>

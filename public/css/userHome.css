@@ -1,0 +1,35 @@
+/* Basic CSS for the navigation bar */
+ul.navbar {
+  list-style-type: none;
+  margin: 0;
+  padding: 0;
+  background-color: #333;
+  overflow: hidden;
+}
+
+ul.navbar li {
+  float: right;
+}
+
+ul.navbar li a {
+  display: block;
+  color: white;
+  text-align: center;
+  padding: 14px 16px;
+  text-decoration: none;
+}
+
+.not-active:hover {
+  background-color: #555;
+  cursor: pointer;
+}
+
+/* Style for the currently selected page */
+ul.navbar li.selected {
+  background-color: #4caf50;
+}
+
+/* Style for the active page */
+ul.navbar li a.active {
+  background-color: #4caf50;
+}

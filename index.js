@@ -291,9 +291,19 @@ app.post("/submit-survey", async (req, res) => {
 // Admin route to fetch and display data
 app.get("/admin/data", checkAuthentication, checkAdmin, async (req, res) => {
   try {
-    const data = await knex
+    let query = knex
       .select("responseid", "timestamp", "location")
       .from("responsesinfo");
+
+    if (req.query.location) {
+      query = query.where("location", req.query.location);
+    }
+
+    if (req.query.responseid) {
+      query = query.where("responseid", req.query.responseid);
+    }
+
+    const data = await query;
     res.render("admin_data", { data });
   } catch (err) {
     console.error(err);
@@ -331,6 +341,76 @@ app.get("/response-detail/:id", async (req, res) => {
     console.error(err);
     res.status(500).send("Error retrieving response data");
   }
+});
+
+// GET route for editing account information
+app.get("/edit-account", checkAuthentication, async (req, res) => {
+  try {
+    const userId = req.session.userId;
+    const user = await knex("users").where("id", userId).first();
+
+    if (user) {
+      res.render("edit_acct", { user });
+    } else {
+      res.status(404).send("User not found");
+    }
+  } catch (error) {
+    console.error(error);
+    res.status(500).send("Server error");
+  }
+});
+
+// POST route for updating account information
+app.post("/edit-account", checkAuthentication, async (req, res) => {
+  const userId = req.session.userId;
+  const { fName, lName, email, phone, password } = req.body;
+
+  try {
+    // Check if email already exists for another user
+    const existingUser = await knex("users")
+      .where("email", email)
+      .andWhere("id", "!=", userId)
+      .first();
+
+    if (existingUser) {
+      // Email already in use by another account
+      return res.render("edit_acct", {
+        user: req.body,
+        error: "Email already in use by another account.",
+      });
+    }
+
+    // Proceed with updating the user's information
+    await knex("users")
+      .where("id", userId)
+      .update({ fName, lName, email, phone, password });
+
+    // Render the same page with a success message
+    res.render("edit_acct", {
+      user: req.body,
+      success: "Account updated successfully.",
+    });
+  } catch (error) {
+    console.error(error);
+
+    // Render the page with an error message instead of sending a separate response
+    res.render("edit_acct", {
+      user: req.body,
+      error: "Error updating account. Please try again.",
+    });
+  }
+});
+
+// POST for logout verify
+app.post("/logout", (req, res) => {
+  req.session.destroy((err) => {
+    if (err) {
+      console.error(err);
+      res.status(500).send("Error occurred while logging out");
+    } else {
+      res.redirect("/");
+    }
+  });
 });
 
 // port response
