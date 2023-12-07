@@ -343,8 +343,8 @@ app.get("/response-detail/:id", async (req, res) => {
   }
 });
 
-// GET route for editing account information
-app.get("/edit-account", checkAuthentication, async (req, res) => {
+// GET route for editing account information - Admin Only
+app.get("/edit-account", checkAuthentication, checkAdmin, async (req, res) => {
   try {
     const userId = req.session.userId;
     const user = await knex("users").where("id", userId).first();
@@ -360,12 +360,79 @@ app.get("/edit-account", checkAuthentication, async (req, res) => {
   }
 });
 
-// POST route for updating account information
-app.post("/edit-account", checkAuthentication, async (req, res) => {
+// POST route for updating user account information
+app.post("/edit-account", checkAuthentication, checkAdmin, async (req, res) => {
   const userId = req.session.userId;
-  const { fName, lName, email, phone, password } = req.body;
+  let { fName, lName, email, phone, password } = req.body;
 
   try {
+    // Convert fName, lName, and email to uppercase
+    fName = fName.toUpperCase();
+    lName = lName.toUpperCase();
+    email = email.toUpperCase();
+
+    // Check if email already exists for another user
+    const existingUser = await knex("users")
+      .where("email", email)
+      .andWhere("id", "!=", userId)
+      .first();
+
+    if (existingUser) {
+      // Email already in use by another account
+      return res.render("edit_acct", {
+        user: req.body,
+        error: "Email already in use by another account.",
+      });
+    }
+
+    // Proceed with updating the user's information
+    await knex("users")
+      .where("id", userId)
+      .update({ fName, lName, email, phone, password });
+
+    // Render the same page with a success message
+    res.render("edit_acct", {
+      user: req.body,
+      success: "Account updated successfully.",
+    });
+  } catch (error) {
+    console.error(error);
+
+    // Render the page with an error message instead of sending a separate response
+    res.render("edit_acct", {
+      user: req.body,
+      error: "Error updating account. Please try again.",
+    });
+  }
+});
+// GET route for editing account information
+app.get("/edit-account2", checkAuthentication, async (req, res) => {
+  try {
+    const userId = req.session.userId;
+    const user = await knex("users").where("id", userId).first();
+
+    if (user) {
+      res.render("edit_acct_user", { user });
+    } else {
+      res.status(404).send("User not found");
+    }
+  } catch (error) {
+    console.error(error);
+    res.status(500).send("Server error");
+  }
+});
+
+// POST route for updating user account information
+app.post("/edit-account2", checkAuthentication, async (req, res) => {
+  const userId = req.session.userId;
+  let { fName, lName, email, phone, password } = req.body;
+
+  try {
+    // Convert fName, lName, and email to uppercase
+    fName = fName.toUpperCase();
+    lName = lName.toUpperCase();
+    email = email.toUpperCase();
+
     // Check if email already exists for another user
     const existingUser = await knex("users")
       .where("email", email)
