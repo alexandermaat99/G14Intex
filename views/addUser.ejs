@@ -5,8 +5,19 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Add User</title>
     <link rel="stylesheet" href="/public/css/userHome.css" />
+    <style>
+      .back-to-userpage-button {
+        position: absolute;
+        top: 10px;
+        left: 10px;
+      }
+    </style>
   </head>
   <body>
+    <a href="/userPage" class="back-to-userpage-button">Back to User Page</a>
+
+    <h1>Add User</h1>
+
     <form action="/addUser" method="POST">
       <label for="fName">Enter User First Name</label>
       <input type="text" name="fName" id="fName" />
@@ -23,8 +34,13 @@
       <label for="password">Enter password</label>
       <input type="text" name="password" id="password" />
       <br /><br />
+      <label for="admin">Admin</label>
+      <select name="admin" id="admin">
+        <option value="true">True</option>
+        <option value="false">False</option>
+      </select>
+      <br /><br />
       <button type="submit">Add User</button>
     </form>
-    <a href="/userPage" class="back-button">Back to User Page</a>
   </body>
 </html>

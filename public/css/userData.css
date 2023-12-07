@@ -194,9 +194,12 @@ table {
 .search-alphabetize-container {
   display: flex;
   justify-content: space-between;
-
-  /* Adjust margins and padding as needed */
+  background-color: rgb(235, 246, 255);
+  padding: 2vw;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
+/* Adjust margins and padding as needed */
 
 .alphabetize-section,
 .search-section {
@@ -217,4 +220,5 @@ table {
 }
 #alpha {
   margin-right: 40px;
+  margin-top: 0px;
 }

@@ -9,6 +9,7 @@
   </head>
 
   <body>
+    <div class="backButton"><button onclick="goBack()">Back</button></div>
     <h1>Social Media Usage Survey</h1>
     <form action="/submit-survey" method="post">
       <!-- Age -->
@@ -532,6 +533,9 @@
       <input type="submit" value="Submit Survey" />
     </form>
     <script>
+      function goBack() {
+        window.history.back();
+      }
       document.querySelectorAll("input[type=range]").forEach((slider) => {
         slider.oninput = () => {
           document.getElementById(slider.id + "Value").textContent =

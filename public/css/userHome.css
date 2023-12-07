@@ -196,3 +196,21 @@ tbody tr:nth-child(odd) {
 .login-container {
   margin-top: 10vh;
 }
+.back-to-userpage-button {
+  position: absolute;
+  top: 10px;
+  left: 10px;
+  padding: 10px 15px;
+  text-decoration: none;
+  color: #fff;
+  background-color: #007bff;
+  border: none;
+  border-radius: 5px;
+  font-size: 16px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.back-to-userpage-button:hover {
+  background-color: #0056b3;
+}
