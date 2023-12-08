@@ -472,6 +472,7 @@ app.post("/edit-account", checkAuthentication, checkAdmin, async (req, res) => {
     });
   }
 });
+
 // GET route for editing account information
 app.get("/edit-account2", checkAuthentication, async (req, res) => {
   try {
