@@ -8,7 +8,8 @@ const app = express();
 const path = require("path");
 
 // Serve static files from the public folder
-app.use(express.static("public"));
+
+app.use(express.static("public", { extensions: false }));
 app.use("/public", express.static(__dirname + "/public"));
 
 // Set EJS as the view engine
